@@ -8,11 +8,19 @@ const {
   TouchableOpacity
 } = ReactNative;
 
+/**
+ * ButtonCircle component
+ */
 export default class ButtonCircle extends Component {
+
+  /**
+   * Render a ButtonCircle
+   * @return {jsxresult} result in jsx format
+   */
 	render() {
 		return (
 			<TouchableOpacity style={styles.button} onPress={this.props.onPress}>
-				  <Text style={styles.whiteFont}>{this.props.children}</Text>
+				<Text style={styles.whiteFont}>{this.props.children}</Text>
 			</TouchableOpacity>
 		);
 	}

@@ -8,11 +8,19 @@ const {
   TouchableOpacity
 } = ReactNative;
 
+/**
+ * Button component
+ */
 export default class Button extends Component {
+
+  /**
+   * Render a Button
+   * @return {jsxresult} result in jsx format
+   */
 	render() {
 		return (
 			<TouchableOpacity style={styles.button} onPress={this.props.onPress}>
-				  <Text style={styles.whiteFont}>{this.props.children}</Text>
+				<Text style={styles.whiteFont}>{this.props.children}</Text>
 			</TouchableOpacity>
 		);
 	}

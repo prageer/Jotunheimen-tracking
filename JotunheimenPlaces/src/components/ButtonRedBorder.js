@@ -9,18 +9,18 @@ const {
 } = ReactNative;
 
 /**
- * ButtonRedFlat component
+ * ButtonRedBorder component
  */
-export default class ButtonRedFlat extends Component {
+export default class ButtonRedBorder extends Component {
 
   /**
-   * Render ButtonRedFlat
+   * Render ButtonRedBorder
    * @return {jsxresult} result in jsx format
    */
 	render() {
 		return (
 			<TouchableOpacity style={styles.button} onPress={this.props.onPress}>
-				  <Text style={styles.whiteFont}>{this.props.children}</Text>
+				<Text style={styles.whiteFont}>{this.props.children}</Text>
 			</TouchableOpacity>
 		);
 	}
@@ -28,12 +28,16 @@ export default class ButtonRedFlat extends Component {
 
 const styles = StyleSheet.create({
   button: {    
-    padding: 15,
+    padding: 10,
     alignItems: 'center',
-    borderWidth: 0
+    borderWidth: 1,
+    borderColor: 'red',
+    marginLeft:20,
+    marginRight:20
   },
   whiteFont: {
-    color: 'red',    
-    fontSize: 18
+    color: 'red',
+    fontWeight: 'bold',
+    fontSize: 24
   }
 });
