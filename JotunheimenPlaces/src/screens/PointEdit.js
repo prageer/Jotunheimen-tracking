@@ -22,7 +22,7 @@ import likePoints from '../constants/likePoints';
 /**
  * Container component for PointLike page
  */
-class PointLike extends Component {
+class PointEdit extends Component {
 
   /**
     * PointLike Container Constructor
@@ -50,8 +50,15 @@ class PointLike extends Component {
     return (
       <View
         style={styles.container}>
-        <View style={{flex:1.5, alignItems:'center', flexDirection: 'row', marginLeft:20}}>
-          <ButtonCircle onPress={()=>{Actions.activity({mode:mode})}} backgroundColor="white">{backStr}</ButtonCircle>
+        <View style={{flex:1.5,  flexDirection: 'row', justifyContent: 'space-between', marginLeft:20, marginRight:20}}>
+          <View style={{flex:0.3, justifyContent:'center', alignItems:'center'}}>
+            <ButtonCircle onPress={()=>{Actions.activity({mode:mode})}} backgroundColor="white">{backStr}</ButtonCircle>
+          </View>
+          <View style={{flex:0.7, justifyContent:'center', alignItems:'flex-end'}}>
+            <TouchableOpacity>
+              <Image style={{resizeMode: 'contain', height:30}} source={require('../assets/del.png')} />
+            </TouchableOpacity>
+          </View>
         </View>
         <View style={{flex:7, justifyContent: 'center'}}>
           <TagList items={likePointsList} mode={mode} />
@@ -70,4 +77,4 @@ let styles = StyleSheet.create({
   }  
 });
 
-export default PointLike;
+export default PointEdit;

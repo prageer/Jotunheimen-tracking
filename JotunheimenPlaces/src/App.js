@@ -10,6 +10,7 @@ import Activity from './screens/Activity';
 import TrackingSurvey from './screens/TrackingSurvey';
 import End from './screens/End';
 import PointLike from './screens/PointLike';
+import PointEdit from './screens/PointEdit';
 
 const { StyleSheet, Text, View} = ReactNative;
 
@@ -41,10 +42,11 @@ class App extends Component {
           <Scene key="consent" component={Consent} />
           <Scene key="demographics" component={Demographics}  />
           <Scene key="indexsurvey" component={IndexSurvey} />
-          <Scene key="activity" component={Activity}  />
+          <Scene key="activity" component={Activity} />
           <Scene key="trackingsurvey" component={TrackingSurvey} />
           <Scene key="end" component={End} />
-          <Scene key="pointlike" component={PointLike}  />
+          <Scene key="pointlike" component={PointLike} />
+          <Scene key="pointedit" component={PointEdit} />
         </Scene>
       </Router>
     );

@@ -18,9 +18,17 @@ export default class ButtonCircle extends Component {
    * @return {jsxresult} result in jsx format
    */
 	render() {
+
+    let btnStyle = [styles.button];
+    let txtStyle = [styles.whiteFont];
+    if( this.props.backgroundColor=="white" ){
+      btnStyle = [styles.button, styles.backWhite];
+      txtStyle = [styles.whiteFont, styles.colorBlack]
+    }
+
 		return (
-			<TouchableOpacity style={styles.button} onPress={this.props.onPress}>
-				<Text style={styles.whiteFont}>{this.props.children}</Text>
+			<TouchableOpacity style={btnStyle} onPress={this.props.onPress}>
+				<Text style={txtStyle}>{this.props.children}</Text>
 			</TouchableOpacity>
 		);
 	}
@@ -36,10 +44,17 @@ const styles = StyleSheet.create({
     paddingLeft: 19,
     paddingRight: 19
   },
+  backWhite: {
+    backgroundColor: 'white',
+    borderWidth:1
+  },
   whiteFont: {
     color: '#fff',
     fontWeight: 'bold',
-    fontSize: 40,
-    lineHeight:50
+    fontSize: 30,
+    lineHeight:40
+  },
+  colorBlack: {
+    color: 'black'
   }
 });

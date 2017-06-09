@@ -12,7 +12,8 @@ const {
   Text,
   View,
   TouchableOpacity,
-  Button
+  Button,
+  ScrollView
 } = ReactNative;
 
 /**
@@ -33,40 +34,101 @@ class Activity extends Component {
    * Render Activity page
    * @return {jsxresult} result in jsx format
    */
-  render() {    
+  render() {   
+
+    let {mode}  = this.props;
+    let likeList = null;
+    if(mode){
+      likeList = (
+      <View>
+        <TouchableOpacity  onPress={()=>{Actions.pointedit({mode:'like'});}}>
+          <View style={{flex:1, flexDirection: 'row', marginBottom:10}}>          
+            <View style={{flex:0.2, justifyContent:'center', alignItems:'center'}}>
+              <Image style={{resizeMode: 'contain', height:30}} source={require('../assets/smile-small.png')} />
+            </View>
+            <View style={{flex:0.8, justifyContent:'center'}}>
+              <Text>17.5.2017 14:34</Text>
+              <Text>Undisturbed nature, Cultural heritage...</Text>
+            </View>          
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity  onPress={()=>{Actions.pointedit({mode:'dislike'});}}>
+          <View style={{flex:1, flexDirection: 'row', marginBottom:10}}>
+            <View style={{flex:0.2, justifyContent:'center', alignItems:'center'}}>
+              <Image style={{resizeMode: 'contain', height:30}} source={require('../assets/sad-small.png')} />
+            </View>
+            <View style={{flex:0.8, justifyContent:'center'}}>
+              <Text>17.5.2017 14:00</Text>
+              <Text>Garbage, Too many livestock</Text>
+            </View>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity  onPress={()=>{Actions.pointedit({mode:'like'});}}>
+          <View style={{flex:1, flexDirection: 'row', marginBottom:10}}>
+            <View style={{flex:0.2, justifyContent:'center', alignItems:'center'}}>
+              <Image style={{resizeMode: 'contain', height:30}} source={require('../assets/smile-small.png')} />
+            </View>
+            <View style={{flex:0.8, justifyContent:'center'}}>
+              <Text>17.5.2017 14:00</Text>
+              <Text>Aesthetic/scenic, Other</Text>
+            </View>
+          </View>
+        </TouchableOpacity>
+      </View>
+      );
+    }
     return (
       
       <View
         style={styles.container}>
-        <View style={{flex: .2, alignItems: 'center'}}>
-          <TouchableOpacity style={styles.button} onPress={()=>{}}>
-            <Text style={styles.whiteFont}>I LIKE THIS AREA</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={{flex: .2}}>          
-          <TouchableOpacity style={[styles.button, styles.redBtn]} onPress={()=>{}}>
-            <Text style={styles.whiteFont}>I DISLIKE THIS AREA</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={{flex: .3}}>
-          <Text style={styles.descText}>
-            Track your activity. The activity could take from few minutes joggin, fishing, hiking... to several days backpacking in nature for several days. Do not stop tracking until you completely finish the activity. Mark interesting waypoints and tag non-material benefits.
-          </Text>
-        </View>
-        <View style={{flex: .3}}>
-          <ButtonRedBorder onPress={()=>{this.refs.modal3.open()}}>FINISH ACTIVITY</ButtonRedBorder>
-          <View style={{height:20}}>
+        <ScrollView>
+          <View style={{}}>
+            <TouchableOpacity style={styles.button} onPress={()=>{Actions.pointlike({mode:'like'});}}>
+              <View style={{flex:1, flexDirection: 'row'}}>
+                <View style={{flex:0.3, justifyContent:'center', alignItems:'center'}}>
+                  <Image style={{resizeMode: 'contain', height:'80%'}} source={require('../assets/smile-big.png')} />
+                </View>
+                <View style={{flex:0.7, justifyContent:'center'}}>
+                  <Text style={styles.whiteFont}>I LIKE THIS AREA</Text>
+                </View>
+              </View>
+            </TouchableOpacity>
           </View>
-          <ButtonRedFlat onPress={()=>{Actions.indexsurvey();}}>Cancel</ButtonRedFlat>
-        </View>
+          <View style={{}}>          
+            <TouchableOpacity style={[styles.button, styles.redBtn]} onPress={()=>{Actions.pointlike({mode:'dislike'});}}>
+              <View style={{flex:1, flexDirection: 'row'}}>
+                <View style={{flex:0.3, justifyContent:'center', alignItems:'center'}}>
+                  <Image style={{resizeMode: 'contain', height:'80%'}} source={require('../assets/sad-big.png')} />
+                </View>
+                <View style={{flex:0.7, justifyContent:'center'}}>
+                  <Text style={styles.whiteFont}>I DISLIKE THIS AREA</Text>
+                </View>
+              </View>
+            </TouchableOpacity>
+          </View>
+          <View style={{}}>
+            <Text style={styles.descText}>
+              Track your activity. The activity could take from few minutes joggin, fishing, hiking... to several days backpacking in nature for several days. Do not stop tracking until you completely finish the activity. Mark interesting waypoints and tag non-material benefits.
+            </Text>
+          </View>
+          <View style={{}}>
+            <ButtonRedBorder onPress={()=>{this.refs.modal3.open()}}>FINISH ACTIVITY</ButtonRedBorder>
+            <View style={{height:20}}>
+            </View>
+            {( !mode ) && (<ButtonRedFlat onPress={()=>{Actions.indexsurvey();}}>Cancel</ButtonRedFlat> )}
+          </View>
+          
+          {likeList}
+          
+        </ScrollView>
 
         <Modal style={[styles.modal, styles.modal3]} position={"center"} ref={"modal3"} >
-          <Text style={{color:'black', marginBottom: 20, fontSize: 15}}>Are you sure you want to end journey and send the waypoints?</Text>
+          <Text style={{color:'black', marginBottom: 20, fontSize: 18, textAlign: 'center'}}>Are you sure you want to end journey and send the waypoints?</Text>
           <TouchableOpacity style={{margin: 20, borderWidth: 2,borderRightWidth: 4, borderBottomWidth: 4}} onPress={()=>{Actions.trackingsurvey();}}>
-            <Text style={{color:'black', padding:10}}>Yes, end journey and go to questionnaries</Text>
+            <Text style={{color:'black', padding: 10, fontSize: 15, textAlign: 'center'}}>Yes, end journey and go to questionnaries</Text>
           </TouchableOpacity>
           <TouchableOpacity style={{margin:20}} onPress={()=>{ this.refs.modal3.close() }} >
-            <Text style={{color:'blue'}} >No, continue adding waypoints</Text>
+            <Text style={{color:'blue', fontSize: 15}} >No, continue adding waypoints</Text>
           </TouchableOpacity>
         </Modal>
       </View>
@@ -80,15 +142,13 @@ let styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'transparent',    
     flexDirection: 'column',
-    justifyContent: 'space-between'
+    justifyContent: 'center'
   },
   button: {
-    backgroundColor: '#00743C',
-    alignItems: 'center',
+    backgroundColor: '#00743C',    
     borderWidth: 0,
     width:'100%',
-    height:'100%',
-    justifyContent:'center'
+    height:100
   },
   redBtn: {
     backgroundColor: 'red'

@@ -25,7 +25,7 @@ export default class TagList extends Component {
   constructor(props){
     super(props);
     this.state = {
-      selIds: []
+      selIds: [0,2,3]
     }
   }
 
@@ -56,15 +56,19 @@ export default class TagList extends Component {
    * @return {jsxresult} result in jsx format
    */
   render() {
-    let {items} = this.props;
+    let {items, mode} = this.props;
 
     return (
       <View style={{flex:1, marginLeft:20, marginRight:20}}>
         {items.map((obj, i) => {
 
           let btnStyle = [styles.button];
-          if( this.state.selIds.includes(i) )
-            btnStyle = [styles.button, styles.bgRed];
+          if( this.state.selIds.includes(i) ){
+            if( mode=="like" )
+              btnStyle = [styles.button, styles.bgBlue];
+            if( mode=="dislike" )
+              btnStyle = [styles.button, styles.bgRed];
+          }
 
           return (            
             <View key={i} style={styles.list}>
@@ -93,9 +97,13 @@ var styles = StyleSheet.create({
   },
   whiteFont: {
     color: '#fff',    
-    fontSize: 20
+    fontSize: 18,
+    fontWeight: 'bold'
   },
   bgRed: {
     backgroundColor: 'red'
+  },
+  bgBlue: {
+    backgroundColor: '#00743C'
   }
 });
