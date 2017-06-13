@@ -1,0 +1,5 @@
+/* DEMOGRAPHICS */
+export const SET_DEMOGRAPHICS = 'SET_DEMOGRAPHICS';
+
+/* SURVEY */
+export const SET_SURVEY = 'SET_SURVEY';

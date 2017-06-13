@@ -37,10 +37,10 @@ class App extends Component {
     return ( 
       <Router>
         <Scene key="root" hideNavBar={true}>
-          <Scene key="welcome" component={Welcome} initial={true} />
+          <Scene key="welcome" component={Welcome} />
           <Scene key="instruction" component={Instruction} />
           <Scene key="consent" component={Consent} />
-          <Scene key="demographics" component={Demographics}  />
+          <Scene key="demographics" component={Demographics} initial={true}  />
           <Scene key="indexsurvey" component={IndexSurvey} />
           <Scene key="activity" component={Activity} />
           <Scene key="trackingsurvey" component={TrackingSurvey} />

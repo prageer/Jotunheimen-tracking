@@ -18,6 +18,11 @@ import gender from '../constants/gender';
 import education from '../constants/education';
 import tax from '../constants/tax';
 
+import {connect} from 'react-redux';
+
+import {  
+  setDemographics
+} from '../actions/demographics';
 /**
  * Container component for Demographics page
  */
@@ -30,11 +35,87 @@ class Demographics extends Component {
     */
   constructor(props){
     super(props);
+    
+    this.info = {
+      iResidence: '',      
+      sGender: '',
+      iAge: '',
+      sEducation: '',
+      sTax: '',
+      iHowMany: ''
+    }    
+  }
 
-    this.orientation = 'landscape';
-    this.state={
-      language:''
-    }
+  /**
+    * Handle Start Activity Click Event
+    * @return {void}
+    */
+  startActivity(){
+    console.log(this.info);    
+    Actions.indexsurvey();
+  }
+
+  /**
+    * Get Postal code
+    * @param {str} value - postal code
+    * @return {void}
+    */
+  onChangePostalCode(value){
+    this.info.iResidence = value;
+  }
+
+  /**
+    * Get Other Country
+    * @param {str} value - other country
+    * @return {void}
+    */
+  onChangeCountry(value){
+    this.info.iResidence = value;
+  }
+
+  /**
+    * Get Gender
+    * @param {str} value - gender
+    * @return {void}
+    */
+  onChangeGender(value){
+    this.info.sGender = value;
+  }
+
+  /**
+    * Get Age
+    * @param {str} value - Age
+    * @return {void}
+    */
+  onChangeAge(value){
+    this.info.iAge = value;
+  }
+
+  /**
+    * Get Education
+    * @param {str} value - education
+    * @return {void}
+    */
+  onChangeEducation(value){
+    this.info.sEducation = value;
+  }
+
+  /**
+    * Get Tax
+    * @param {str} value - tax
+    * @return {void}
+    */
+  onChangeTax(value){
+    this.info.sTax = value;
+  }
+
+  /**
+    * Get How many times
+    * @param {str} value - times
+    * @return {void}
+    */
+  onChangeHowMany(value){
+    this.info.iHowMany = value;    
   }
 
   /**
@@ -61,36 +142,36 @@ class Demographics extends Component {
             <View style={styles.item}>
               <Text style={styles.questionTextContainer}>1. What is your country of residence?</Text>
               <Text style={styles.questionTextContainer}>Choose only 1</Text>
-              <InputText placeholder="Post code" floattext="Norway? Postal code:" />
-              <SelectBox placeholder="Other Country" floattext="Other Country:" />
+              <InputText placeholder="Post code" floattext="Norway? Postal code:" handleChangeText={this.onChangePostalCode.bind(this)} />
+              <SelectBox placeholder="Other Country" floattext="Other Country:" handleChangeText={this.onChangeCountry.bind(this)} />
             </View>
             <View style={styles.item}>
               <Text style={styles.questionTextContainer}>2. What is your gender?</Text>
-              <ItemList items={genderList} />
+              <ItemList items={genderList} handleChangeItem = {this.onChangeGender.bind(this)} />
             </View>
             <View style={styles.item}>
               <Text style={styles.questionTextContainer}>3. What is your age?</Text>
-              <InputText placeholder="Age" />
+              <InputText placeholder="Age" handleChangeText={this.onChangeAge.bind(this)} />
             </View>
             <View style={styles.item}>
               <Text style={styles.questionTextContainer}>4. What is the highest education level you have completed?</Text>
               <Text style={styles.questionTextContainer}>Choose only 1</Text>
-              <ItemList items={educationList} />
+              <ItemList items={educationList} handleChangeItem = {this.onChangeEducation.bind(this)} />
             </View>
             <View style={styles.item}>
               <Text style={styles.questionTextContainer}>5. What was the approximate total after-tax income of your household for year 2014?</Text>
               <Text style={styles.questionTextContainer}>Choose only 1 [optional question]</Text>              
-              <ItemList items={taxList} />
+              <ItemList items={taxList} handleChangeItem = {this.onChangeTax.bind(this)} />
             </View>
             <View style={styles.item}>
               <Text style={styles.questionTextContainer}>6. How many times in the past have you visited this area?</Text>
-              <InputText />
+              <InputText handleChangeText={this.onChangeHowMany.bind(this)} />
             </View>
             <View style={styles.item}>
               <Text style={styles.headTextContainer}>Now you are ready to track your activity. Please do not stop tracking until you completely finish the activity. We would like you to create waypoints of places and tag them according to what you like or dislike in the place.</Text>
             </View>
             <View style={{marginLeft:20, marginRight:20, marginBottom:20, marginTop:20}}>
-              <Button onPress={()=>Actions.indexsurvey()}>Start activity</Button>              
+              <Button onPress={this.startActivity.bind(this)}>Start activity</Button>              
             </View>
           </View>
         </ScrollView>
@@ -128,4 +209,29 @@ let styles = StyleSheet.create({
   }
 });
 
-export default Demographics;
+
+/**
+ * Map Redux store state to component props
+ * @param {state} state Redux store state
+ * @return {json} state json State from redux store state
+ */
+const mapStateToProps = (state) => {    
+  return {
+    personalInfo: state.demographics.personalInfo
+  };
+};
+
+/**
+ * Map Redux dispatches to component props
+ * @param {object} dispatch Redux dispatches
+ * @return {json} dispatch-json from redux dispatche
+ */
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setDemographics: (personalInfo) => {
+      return dispatch(setDemographics(personalInfo));
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Demographics);

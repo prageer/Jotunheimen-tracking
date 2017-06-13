@@ -37,10 +37,118 @@ class TrackingSurvey extends Component {
   constructor(props){
     super(props);
 
-    this.orientation = 'landscape';
-    this.state={
-      language:''
+    this.info = {
+      sActivity: '',
+      sParticipant: '',
+      smLearnNature: '',
+      smTogether: '',
+      smHealth: '',
+      smInspire: '',
+      smNurture: '',
+      sExperience: '',
+      smOverall: '',
+      iComment: '',
+      iEmail: ''
     }
+  }
+
+  /**
+    * Get Activity
+    * @param {str} value - activity
+    * @return {void}
+    */
+  onChangeActivity(value) {
+    this.info.sActivity = value;
+  }
+
+  /**
+    * Get Participant
+    * @param {str} value - participant
+    * @return {void}
+    */
+  onChangeParticipant(value) {
+    this.info.sParticipant = value;
+  }
+
+  /**
+    * Get LearnNature Mark
+    * @param {str} value - Nature Mark
+    * @return {void}
+    */
+  onChangeLearnNature(value) {
+    this.info.smLearnNature = value;
+  }
+
+  /**
+    * Get TogetherMark
+    * @param {str} value - TogetherMark
+    * @return {void}
+    */
+  onChangeTogether(value) {
+    this.info.smTogether = value;
+  }
+
+  /**
+    * Get HealthMark
+    * @param {str} value - HealthMark
+    * @return {void}
+    */
+  onChangeHealth(value) {
+    this.info.smHealth = value;    
+  }
+
+  /**
+    * Get InspireMark
+    * @param {str} value - InspireMark
+    * @return {void}
+    */
+  onChangeInspire(value) {
+    this.info.smInspire = value;    
+  }
+
+  /**
+    * Get NurtureMark
+    * @param {str} value - NurtureMark
+    * @return {void}
+    */
+  onChangeNurture(value) {
+    this.info.smNurture = value;    
+  }
+
+  /**
+    * Get Experience
+    * @param {str} value - Experience
+    * @return {void}
+    */
+  onChangeExperience(value) {
+    this.info.sExperience = value;    
+  }
+
+  /**
+    * Get OverallMark
+    * @param {str} value - OverallMark
+    * @return {void}
+    */
+  onChangeOverall(value) {
+    this.info.smOverall = value;    
+  }
+
+  /**
+    * Get Comment
+    * @param {str} value - Comment
+    * @return {void}
+    */
+  onChangeComment(value) {
+    this.info.iComment = value;
+  }
+
+  /**
+    * Get Email
+    * @param {str} value - Email
+    * @return {void}
+    */
+  onChangeEmail(value) {
+    this.info.iEmail = value;
   }
 
   /**
@@ -48,7 +156,7 @@ class TrackingSurvey extends Component {
    * @return {jsxresult} result in jsx format
    */
   render() {    
-    let genderList = activities.map((item, key)=>{
+    let activityList = activities.map((item, key)=>{
       return {'label': item.name, value: key};
     });    
     let participantsList = participants.map((item, key)=>{
@@ -72,42 +180,42 @@ class TrackingSurvey extends Component {
             <Text style={styles.headTextContainer}>Your visit today:</Text>            
             <View style={styles.item}>
               <Text style={styles.questionTextContainer}>7. What nature-based activites did you participate in during the tracking today? Click multiple if relevant</Text>
-              <ItemList items={genderList} />
+              <ItemList items={activityList} handleChangeItem = {this.onChangeActivity.bind(this)} />
             </View>
             <View style={styles.item}>
               <Text style={styles.questionTextContainer}>8. With whom did you conduct these activities today?</Text>
               <Text style={styles.questionTextContainer}>choose only 1</Text>
-              <ItemList items={participantsList} />
+              <ItemList items={participantsList} handleChangeItem = {this.onChangeParticipant.bind(this)} />
             </View>
             <View style={styles.item}>
               <Text style={styles.questionTextContainer}>9. The visit today has been important for...</Text>
               <Text style={styles.questionTextContainer}>1. Learning about the nature</Text>
-              <ItemList items={markList} />
+              <ItemList items={markList} handleChangeItem = {this.onChangeLearnNature.bind(this)} />
               <Text style={styles.questionTextContainer}>2. being together with my family/friends</Text>
-              <ItemList items={markList} />
+              <ItemList items={markList} handleChangeItem = {this.onChangeTogether.bind(this)} />
               <Text style={styles.questionTextContainer}>3. my physical/mental health</Text>
-              <ItemList items={markList} />
+              <ItemList items={markList} handleChangeItem = {this.onChangeHealth.bind(this)} />
               <Text style={styles.questionTextContainer}>4. inspiring me to create crafts, stories or other artistic work</Text>
-              <ItemList items={markList} />
+              <ItemList items={markList} handleChangeItem = {this.onChangeInspire.bind(this)} />
               <Text style={styles.questionTextContainer}>5. Nurturing a deeper meaning of nature; emotionally or spiritually</Text>
-              <ItemList items={markList} />
+              <ItemList items={markList} handleChangeItem = {this.onChangeNurture.bind(this)} />
             </View>
             <View style={styles.item}>
               <Text style={styles.questionTextContainer}>10. My experience today was negatively impacted by:</Text>
-              <ItemList items={negativesList} />
+              <ItemList items={negativesList} handleChangeItem = {this.onChangeExperience.bind(this)} />
             </View>
             <View style={styles.item}>
               <Text style={styles.questionTextContainer}>11. How would you rate your overall experience today?</Text>
               <Text style={styles.questionTextContainer}>choose only 1</Text>
-              <ItemList items={experienceMarkList} />
+              <ItemList items={experienceMarkList} handleChangeItem = {this.onChangeOverall.bind(this)} />
             </View>
             <View style={styles.item}>
               <Text style={styles.questionTextContainer}>12. Leave any additional comment that you would like to make here:</Text>
-              <InputTextArea multiline={true} numberOfLines={4} />              
+              <InputTextArea multiline={true} numberOfLines={4} handleChangeText={this.onChangeComment.bind(this)} />
             </View>
             <View style={styles.item}>
               <Text style={styles.questionTextContainer}>13. We would appreciate if we at a later stage could ask you few more questions. If so, please enter your email here:</Text>
-              <InputText placeholder="Email" />
+              <InputText placeholder="Email" handleChangeText={this.onChangeEmail.bind(this)} />
             </View>
             <View style={styles.item}>
               <Text style={styles.headTextContainer}>Thank you very much for your participation!</Text>

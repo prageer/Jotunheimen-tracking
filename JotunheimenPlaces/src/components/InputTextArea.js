@@ -11,8 +11,15 @@ const {
 /**
  * InputTextArea component
  */
-export default class InputTextArea extends Component {
+class InputTextArea extends Component {
 
+  constructor(props){
+    super(props);    
+  }
+
+  onChange(text) {    
+    this.props.handleChangeText(text);
+  }
   /**
    * Render InputTextArea
    * @return {jsxresult} result in jsx format
@@ -32,6 +39,7 @@ export default class InputTextArea extends Component {
             placeholder={this.props.placeholder}
             multiline = {true}
             numberOfLines = {4}
+            onChangeText={this.onChange.bind(this)}
           />
 			</View>
 		);
@@ -57,3 +65,5 @@ const styles = StyleSheet.create({
     fontSize: 18
   }
 });
+
+export default InputTextArea;

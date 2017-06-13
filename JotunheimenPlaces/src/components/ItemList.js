@@ -25,8 +25,9 @@ export default class ItemList extends Component {
   constructor(props){
     super(props);
     this.state = {
-      value3Index:null,
-      value3:null
+      value3Index: null,
+      value3: null,
+      viewOther: false
     }
   }  
 
@@ -41,6 +42,22 @@ export default class ItemList extends Component {
       value3: value,
       value3Index: index
     })
+
+    if(value.label == 'Other'){
+      this.setState({
+        viewOther: true
+      })
+    }else{
+      this.setState({
+        viewOther: false
+      })      
+    }
+
+    this.props.handleChangeItem(value.label);
+  }
+
+  onChangeOther(value){
+    this.props.handleChangeItem(value);
   }
 
   /**
@@ -49,6 +66,15 @@ export default class ItemList extends Component {
    */
   render() {
     let {items} = this.props;
+
+    let otherInput = null;
+    if ( (items.length) && items[items.length-1].label == 'Other' ){
+      otherInput = (
+        <View style={{marginTop:-10}}>
+          <InputText placeholder="Other" handleChangeText={this.onChangeOther.bind(this)} />
+        </View>
+      );
+    }    
 
     return (
       <View style={styles.itemList}>
@@ -85,13 +111,7 @@ export default class ItemList extends Component {
           })}
         </RadioForm>
 
-        {( (items.length) && items[items.length-1].label == "Other" ) &&
-          (
-          <View style={{marginTop:-10}}>
-            <InputText placeholder="Other" />
-          </View>
-          )
-        }
+        {(this.state.viewOther) && otherInput}
       </View>
     );
   }

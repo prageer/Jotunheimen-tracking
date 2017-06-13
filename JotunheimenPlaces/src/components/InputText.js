@@ -11,7 +11,16 @@ const {
 /**
  * InputText component
  */
-export default class InputText extends Component {
+class InputText extends Component {
+
+  constructor(props){
+    super(props);    
+  }
+
+
+  onChange(text) {    
+    this.props.handleChangeText(text);
+  }
 
   /**
    * Render InputText
@@ -30,6 +39,7 @@ export default class InputText extends Component {
             style={styles.whiteFont}
             underlineColorAndroid="transparent"
             placeholder={this.props.placeholder}
+            onChangeText={this.onChange.bind(this)}
           />
 			</View>
 		);
@@ -56,3 +66,5 @@ const styles = StyleSheet.create({
     fontSize: 18
   }
 });
+
+export default InputText;

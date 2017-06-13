@@ -20,12 +20,19 @@ export default class selectBox extends Component {
     * @param {props} props from parent component
     * @return {void}
     */
-  constructor() {
-      super();
+  constructor(props) {
+      super(props);
 
       this.state = {
           textInputValue: ''
       }
+  }
+
+  onChangeSelect(option){
+    this.setState({
+      textInputValue:option.label
+    });
+    this.props.handleChangeText(option.label);
   }
   
   /**
@@ -43,7 +50,7 @@ export default class selectBox extends Component {
         <ModalPicker
           data={data}
           initValue="Select something yummy!"
-          onChange={(option)=>{ this.setState({textInputValue:option.label})}}>
+          onChange={this.onChangeSelect.bind(this)}>
         
           {
           this.props.floattext !="" && 
