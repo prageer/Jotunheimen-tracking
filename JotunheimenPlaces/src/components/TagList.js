@@ -31,6 +31,31 @@ export default class TagList extends Component {
     this.performTag();
   }
 
+  isContains(json, value) {
+    let contains = false;
+    Object.keys(json).some(key => {
+        contains = typeof json[key] === 'object' ? _isContains(json[key], value) : json[key] === value;
+         return contains;
+    });
+    return contains;
+  }
+
+
+  componentDidMount(){
+    if (this.props.selectedIndex != undefined ){
+      let selIds = [];
+      this.props.items.map((item, index)=>{        
+        if( this.isContains(this.props.pointData, item.label) ){          
+          selIds.push(index);
+        }
+      });
+
+      this.setState({
+        selIds: selIds
+      });
+    }
+  }
+
   /**
    * Handles the event when a item is pressed
    * @param {int} key

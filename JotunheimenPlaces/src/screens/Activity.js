@@ -6,6 +6,8 @@ import ButtonRedFlat from '../components/ButtonRedFlat';
 import ButtonRedBorder from '../components/ButtonRedBorder';
 import Modal from 'react-native-modalbox';
 
+import {connect} from 'react-redux';
+
 const {
   Image,
   StyleSheet,
@@ -30,64 +32,54 @@ class Activity extends Component {
     super(props);
   }
 
-  onClickLike() {    
-    Actions.pointlike({mode:'like'});
-  }
-
   /**
    * Render Activity page
    * @return {jsxresult} result in jsx format
    */
   render() {   
 
-    let {mode}  = this.props;
+    const {pointInfo}  = this.props;
     let likeList = null;
-    if(mode){
-      likeList = (
-      <View>
-        <TouchableOpacity  onPress={()=>{Actions.pointedit({mode:'like'});}}>
-          <View style={{flex:1, flexDirection: 'row', marginBottom:10}}>          
-            <View style={{flex:0.2, justifyContent:'center', alignItems:'center'}}>
-              <Image style={{resizeMode: 'contain', height:30}} source={require('../assets/smile-small.png')} />
-            </View>
-            <View style={{flex:0.8, justifyContent:'center'}}>
-              <Text>17.5.2017 14:34</Text>
-              <Text>Undisturbed nature, Cultural heritage...</Text>
-            </View>          
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity  onPress={()=>{Actions.pointedit({mode:'dislike'});}}>
+
+    likeList = pointInfo.map((item, index)=>{
+      let activityMode = item.mode;
+      let smileIcon = null;
+      if( activityMode == "like"){
+        smileIcon = ( <Image style={{resizeMode: 'contain', height:30}} source={require('../assets/smile-small.png')} /> );
+      }else{
+        smileIcon = ( <Image style={{resizeMode: 'contain', height:30}} source={require('../assets/sad-small.png')} /> );
+      }
+
+      let pointText = "";
+      for(var key in item){
+        if( key == "dateTime" || key == "mode")
+          continue;
+        pointText += item[key] + ", ";
+      }
+      pointText = pointText.slice(0, -2);
+
+      return (
+        <TouchableOpacity  onPress={()=>{Actions.pointedit({mode: activityMode, selectedIndex: index }) }}>
           <View style={{flex:1, flexDirection: 'row', marginBottom:10}}>
             <View style={{flex:0.2, justifyContent:'center', alignItems:'center'}}>
-              <Image style={{resizeMode: 'contain', height:30}} source={require('../assets/sad-small.png')} />
+              {smileIcon}
             </View>
             <View style={{flex:0.8, justifyContent:'center'}}>
-              <Text>17.5.2017 14:00</Text>
-              <Text>Garbage, Too many livestock</Text>
+              <Text>{item.dateTime}</Text>              
+              <Text style={{marginRight:20}}>{pointText}</Text>
             </View>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity  onPress={()=>{Actions.pointedit({mode:'like'});}}>
-          <View style={{flex:1, flexDirection: 'row', marginBottom:10}}>
-            <View style={{flex:0.2, justifyContent:'center', alignItems:'center'}}>
-              <Image style={{resizeMode: 'contain', height:30}} source={require('../assets/smile-small.png')} />
-            </View>
-            <View style={{flex:0.8, justifyContent:'center'}}>
-              <Text>17.5.2017 14:00</Text>
-              <Text>Aesthetic/scenic, Other</Text>
-            </View>
-          </View>
-        </TouchableOpacity>
-      </View>
-      );
-    }
+      )
+    });
+
     return (
       
       <View
         style={styles.container}>
         <ScrollView>
           <View style={{}}>
-            <TouchableOpacity style={styles.button} onPress={this.onClickLike.bind(this)}>
+            <TouchableOpacity style={styles.button} onPress={()=>{Actions.pointlike({mode:'like'});}}>
               <View style={{flex:1, flexDirection: 'row'}}>
                 <View style={{flex:0.3, justifyContent:'center', alignItems:'center'}}>
                   <Image style={{resizeMode: 'contain', height:'80%'}} source={require('../assets/smile-big.png')} />
@@ -119,10 +111,10 @@ class Activity extends Component {
             <ButtonRedBorder onPress={()=>{this.refs.modal3.open()}}>FINISH ACTIVITY</ButtonRedBorder>
             <View style={{height:20}}>
             </View>
-            {( !mode ) && (<ButtonRedFlat onPress={()=>{Actions.indexsurvey();}}>Cancel</ButtonRedFlat> )}
+            {( likeList == "" ) && (<ButtonRedFlat onPress={()=>{Actions.indexsurvey();}}>Cancel</ButtonRedFlat> )}
           </View>
           
-          {likeList}
+          {(likeList != "" ) && likeList}
           
         </ScrollView>
 
@@ -191,4 +183,15 @@ let styles = StyleSheet.create({
   }
 });
 
-export default Activity;
+/**
+ * Map Redux store state to component props
+ * @param {state} state Redux store state
+ * @return {json} state json State from redux store state
+ */
+const mapStateToProps = (state) => {    
+  return {
+    pointInfo: state.point.pointInfo
+  };
+};
+
+export default connect(mapStateToProps, null)(Activity);

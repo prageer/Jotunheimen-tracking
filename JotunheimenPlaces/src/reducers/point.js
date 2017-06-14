@@ -43,6 +43,20 @@ export default function point(state, action) {
         [state.pointInfo.length]: {$set: action.pointItem}
       }
     });
+  
+  case types.DEL_POINT:
+    return update(state, {
+      pointInfo: {
+        $splice: [[action.index, 1]]
+      }
+    });
+
+  case types.EDIT_POINT:
+    return update(state, {
+      pointInfo: {
+        [action.pointIndex]: {$set: action.pointItem}
+      }
+    });
   default:
     return state;
   }

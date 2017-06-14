@@ -9,15 +9,6 @@ import Button from '../components/Button';
 import {Motion, spring} from 'react-motion';
 import { Actions } from 'react-native-router-flux';
 
-const {
-  Image,
-  StyleSheet,
-  Text,
-  View,  
-  ScrollView,
-  TouchableOpacity
-} = ReactNative;
-
 import activities from '../constants/activities';
 import participants from '../constants/participants';
 import mark from '../constants/mark';
@@ -32,6 +23,14 @@ import {
 
 import {setSurveyToFirebase} from '../utils/firebase';
 
+const {
+  Image,
+  StyleSheet,
+  Text,
+  View,  
+  ScrollView,
+  TouchableOpacity
+} = ReactNative;
 
 /**
  * Container component for TrackingSurvey page

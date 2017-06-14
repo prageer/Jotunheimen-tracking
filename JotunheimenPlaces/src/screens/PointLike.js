@@ -9,6 +9,13 @@ import Button from '../components/Button';
 import {Motion, spring} from 'react-motion';
 import { Actions } from 'react-native-router-flux';
 
+import {connect} from 'react-redux';
+import {  
+  setPoint
+} from '../actions/point';
+import {setPointToFirebase} from '../utils/firebase';
+import likePoints from '../constants/likePoints';
+
 const {
   Image,
   StyleSheet,
@@ -17,15 +24,6 @@ const {
   ScrollView,
   TouchableOpacity
 } = ReactNative;
-import likePoints from '../constants/likePoints';
-
-import {connect} from 'react-redux';
-
-import {  
-  setPoint
-} from '../actions/point';
-
-import {setPointToFirebase} from '../utils/firebase';
 
 /**
  * Container component for PointLike page
@@ -42,6 +40,11 @@ class PointLike extends Component {
     this.info = [];
   }
 
+  /**
+    * Handle back event
+    * save info into State, Firebase
+    * @return {void}
+    */
   onBackToActivity() {
     let dateTime = Math.floor(Date.now() / 1000);
     this.info["dateTime"] = dateTime;
@@ -50,9 +53,14 @@ class PointLike extends Component {
     setPointToFirebase(this.info, dateTime);
     this.props.setPoint(this.info);
     
-    Actions.activity({mode: this.props.mode});
+    Actions.activity();
   }
 
+  /**
+    * Get point items from tagList
+    * @param {json} points Selected Point items.
+    * @return {void}
+    */
   getPoint(points) {
     this.info = points;    
   }

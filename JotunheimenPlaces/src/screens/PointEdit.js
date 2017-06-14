@@ -9,6 +9,14 @@ import Button from '../components/Button';
 import {Motion, spring} from 'react-motion';
 import { Actions } from 'react-native-router-flux';
 
+import likePoints from '../constants/likePoints';
+import {connect} from 'react-redux';
+import {  
+  delPoint,
+  editPoint
+} from '../actions/point';
+import {delPointToFirebase, setPointToFirebase} from '../utils/firebase';
+
 const {
   Image,
   StyleSheet,
@@ -17,7 +25,6 @@ const {
   ScrollView,
   TouchableOpacity
 } = ReactNative;
-import likePoints from '../constants/likePoints';
 
 /**
  * Container component for PointLike page
@@ -30,7 +37,50 @@ class PointEdit extends Component {
     * @return {void}
     */
   constructor(props){
-    super(props);    
+    super(props);
+    this.info = [];
+  }
+
+  /**
+    * Handle back event
+    * save info into State, Firebase
+    * @return {void}
+    */
+  onBackToActivity() {
+
+    let selectedIndex = this.props.selectedIndex;
+    let pointInfo = this.props.pointInfo;
+    let dateTime = pointInfo[selectedIndex]["dateTime"];
+
+    this.info["dateTime"] = dateTime;
+    this.info["mode"] = this.props.mode;
+    setPointToFirebase(this.info, dateTime);
+
+    this.props.editPoint(this.info, this.props.selectedIndex);
+
+    Actions.activity();
+  }
+
+  /**
+    * Get point items from tagList
+    * @param {json} points Selected Point items.
+    * @return {void}
+    */
+  getPoint(points) {
+    this.info = points;
+  }
+
+  /**
+    * delete an Item
+    * @return {void}
+    */
+  deletePoint(){
+    let selectedIndex = this.props.selectedIndex;
+    let pointInfo = this.props.pointInfo;    
+    
+    this.props.delPoint(this.props.selectedIndex);
+    delPointToFirebase(pointInfo[selectedIndex]["dateTime"]);
+    Actions.activity();
   }
 
   /**
@@ -52,16 +102,22 @@ class PointEdit extends Component {
         style={styles.container}>
         <View style={{flex:1.5,  flexDirection: 'row', justifyContent: 'space-between', marginLeft:20, marginRight:20}}>
           <View style={{flex:0.3, justifyContent:'center', alignItems:'center'}}>
-            <ButtonCircle onPress={()=>{Actions.activity({mode:mode})}} backgroundColor="white">{backStr}</ButtonCircle>
+            <ButtonCircle onPress={this.onBackToActivity.bind(this)} backgroundColor="white">{backStr}</ButtonCircle>
           </View>
           <View style={{flex:0.7, justifyContent:'center', alignItems:'flex-end'}}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={this.deletePoint.bind(this)}>
               <Image style={{resizeMode: 'contain', height:30}} source={require('../assets/del.png')} />
             </TouchableOpacity>
           </View>
         </View>
         <View style={{flex:7, justifyContent: 'center'}}>
-          <TagList items={likePointsList} mode={mode} />
+          <TagList
+            items={likePointsList}
+            mode={mode}
+            getPoint={this.getPoint.bind(this)}
+            selectedIndex={this.props.selectedIndex}
+            pointData={this.props.pointInfo[this.props.selectedIndex]}
+          />
         </View>          
       </View>
     );
@@ -77,4 +133,32 @@ let styles = StyleSheet.create({
   }  
 });
 
-export default PointEdit;
+/**
+ * Map Redux store state to component props
+ * @param {state} state Redux store state
+ * @return {json} state json State from redux store state
+ */
+const mapStateToProps = (state) => {    
+  return {
+    pointInfo: state.point.pointInfo
+  };
+};
+
+
+/**
+ * Map Redux dispatches to component props
+ * @param {object} dispatch Redux dispatches
+ * @return {json} dispatch-json from redux dispatche
+ */
+const mapDispatchToProps = (dispatch) => {
+  return {
+    delPoint: (pointIndex) => {
+      return dispatch(delPoint(pointIndex));
+    },
+    editPoint: (pointInfo, pointIndex) => {
+      return dispatch(editPoint(pointInfo, pointIndex));      
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(PointEdit);

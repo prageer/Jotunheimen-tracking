@@ -30,3 +30,8 @@ export function setPointToFirebase(info, dateTime){
   const subRecordsRef = firebaseApp.database().ref('point/' + DeviceInfo.getUniqueID() + '/' + dateTime + '/');
   subRecordsRef.set( info );
 }
+
+export function delPointToFirebase(dateTime){  
+  const subRecordsRef = firebaseApp.database().ref('point/' + DeviceInfo.getUniqueID() + '/');
+  subRecordsRef.child( dateTime ).remove();
+}
