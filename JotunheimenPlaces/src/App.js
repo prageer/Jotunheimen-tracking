@@ -11,6 +11,8 @@ import TrackingSurvey from './screens/TrackingSurvey';
 import End from './screens/End';
 import PointLike from './screens/PointLike';
 import PointEdit from './screens/PointEdit';
+import {connect} from 'react-redux';
+import {setLocalToFirebase} from './utils/firebase';
 
 const { StyleSheet, Text, View} = ReactNative;
 
@@ -24,8 +26,12 @@ class App extends Component {
     * @param {props} props from parent component
     * @return {void}
     */
-  constructor(props){
+  constructor(props) {
     super(props);
+  }
+
+  componentDidMount() {
+    setLocalToFirebase( this.props.personalInfo, this.props.pointInfo, this.props.surveyInfo );
   }
 
   /**
@@ -34,15 +40,22 @@ class App extends Component {
    */
   render() {
 
+    let welcomeInitial = false;
+    let indexSurveyInitial = false;
+    if(this.props.personalInfo.iResidence == undefined)
+      welcomeInitial = true;
+    else
+      indexSurveyInitial = true;
+
     return ( 
       <Router>
         <Scene key="root" hideNavBar={true}>
-          <Scene key="welcome" component={Welcome} />
           <Scene key="instruction" component={Instruction} />
+          <Scene key="welcome" component={Welcome} initial={welcomeInitial} />
           <Scene key="consent" component={Consent} />
           <Scene key="demographics" component={Demographics} />
-          <Scene key="indexsurvey" component={IndexSurvey} />
-          <Scene key="activity" component={Activity} initial={true} />
+          <Scene key="indexsurvey" component={IndexSurvey} initial={indexSurveyInitial} />
+          <Scene key="activity" component={Activity} />
           <Scene key="trackingsurvey" component={TrackingSurvey} />
           <Scene key="end" component={End} />
           <Scene key="pointlike" component={PointLike} />
@@ -53,4 +66,17 @@ class App extends Component {
   }
 }
 
-export default App;
+/**
+ * Map Redux store state to component props
+ * @param {state} state Redux store state
+ * @return {json} state json State from redux store state
+ */
+const mapStateToProps = (state) => {    
+  return {
+    personalInfo: state.demographics.personalInfo,
+    pointInfo: state.point.pointInfo,
+    surveyInfo: state.survey.surveyInfo
+  };
+};
+
+export default connect(mapStateToProps, null)(App);

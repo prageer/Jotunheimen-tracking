@@ -2,7 +2,8 @@ import * as types from '../actions/ActionTypes';
 import update from 'react-addons-update';
 
 const initialState = {
-  surveyInfo: []
+  surveyInfo: [],
+  stage: 0
 };
 
 /**
@@ -21,7 +22,8 @@ export default function survey(state, action) {
     return update(state, {
       surveyInfo: {
         [state.surveyInfo.length]: {$set: action.surveyInfo}
-      }
+      },
+      stage: {$set: (state.stage+1)}
     });
   default:
     return state;

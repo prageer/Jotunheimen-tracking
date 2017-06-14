@@ -56,7 +56,9 @@ class TrackingSurvey extends Component {
       sExperience: '',
       smOverall: '',
       iComment: '',
-      iEmail: ''
+      iEmail: '',
+      dateTime: 0,
+      stage: 0
     }
   }
 
@@ -65,9 +67,13 @@ class TrackingSurvey extends Component {
     * @return {void}
     */
   sendSurvey(){
+    let dateTime = Math.floor(Date.now() / 1000);
+    this.info["dateTime"] = dateTime;
+    this.info["stage"] = this.props.stage;
+
     this.props.addSurvey( this.info );
     setSurveyToFirebase(this.info);    
-    //Actions.end();
+    Actions.end();
   }
 
   /**
@@ -285,7 +291,8 @@ let styles = StyleSheet.create({
  */
 const mapStateToProps = (state) => {    
   return {
-    surveyInfo: state.survey.surveyInfo
+    surveyInfo: state.survey.surveyInfo,
+    stage: state.survey.stage
   };
 };
 

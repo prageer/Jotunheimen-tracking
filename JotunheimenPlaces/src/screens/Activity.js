@@ -42,6 +42,9 @@ class Activity extends Component {
     let likeList = null;
 
     likeList = pointInfo.map((item, index)=>{
+      if( item.stage != this.props.stage )
+        return null;
+
       let activityMode = item.mode;
       let smileIcon = null;
       if( activityMode == "like"){
@@ -52,14 +55,14 @@ class Activity extends Component {
 
       let pointText = "";
       for(var key in item){
-        if( key == "dateTime" || key == "mode")
+        if( key == "dateTime" || key == "mode" || key == "lat" || key == "lang")
           continue;
         pointText += item[key] + ", ";
       }
       pointText = pointText.slice(0, -2);
 
       return (
-        <TouchableOpacity  onPress={()=>{Actions.pointedit({mode: activityMode, selectedIndex: index }) }}>
+        <TouchableOpacity key={index} onPress={()=>{Actions.pointedit({mode: activityMode, selectedIndex: index }) }}>
           <View style={{flex:1, flexDirection: 'row', marginBottom:10}}>
             <View style={{flex:0.2, justifyContent:'center', alignItems:'center'}}>
               {smileIcon}
@@ -72,6 +75,8 @@ class Activity extends Component {
         </TouchableOpacity>
       )
     });
+
+    likeList = likeList.filter(function(n){ return n != null });
 
     return (
       
@@ -111,10 +116,10 @@ class Activity extends Component {
             <ButtonRedBorder onPress={()=>{this.refs.modal3.open()}}>FINISH ACTIVITY</ButtonRedBorder>
             <View style={{height:20}}>
             </View>
-            {( likeList == "" ) && (<ButtonRedFlat onPress={()=>{Actions.indexsurvey();}}>Cancel</ButtonRedFlat> )}
+            {( likeList.length == 0 ) && (<ButtonRedFlat onPress={()=>{Actions.indexsurvey();}}>Cancel</ButtonRedFlat> )}
           </View>
           
-          {(likeList != "" ) && likeList}
+          {(likeList.length != 0 ) && likeList}
           
         </ScrollView>
 
@@ -190,7 +195,8 @@ let styles = StyleSheet.create({
  */
 const mapStateToProps = (state) => {    
   return {
-    pointInfo: state.point.pointInfo
+    pointInfo: state.point.pointInfo,
+    stage: state.survey.stage
   };
 };
 

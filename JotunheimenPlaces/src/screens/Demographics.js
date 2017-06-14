@@ -56,7 +56,7 @@ class Demographics extends Component {
   startActivity(){    
     this.props.setDemographics( this.info );
     setPersonalToFirebase(this.info);    
-    //Actions.indexsurvey();
+    Actions.indexsurvey();
   }
 
   /**

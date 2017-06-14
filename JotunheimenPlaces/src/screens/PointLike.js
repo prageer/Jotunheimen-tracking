@@ -38,6 +38,10 @@ class PointLike extends Component {
   constructor(props) {
     super(props);
     this.info = [];
+    this.location = {
+      "lat": 0,
+      "lang": 0
+    }
   }
 
   /**
@@ -49,6 +53,10 @@ class PointLike extends Component {
     let dateTime = Math.floor(Date.now() / 1000);
     this.info["dateTime"] = dateTime;
     this.info["mode"] = this.props.mode;
+
+    this.info["lat"] = this.location.lat;
+    this.info["lang"] = this.location.lang;
+    this.info["stage"] = this.props.stage;
     
     setPointToFirebase(this.info, dateTime);
     this.props.setPoint(this.info);
@@ -63,6 +71,21 @@ class PointLike extends Component {
     */
   getPoint(points) {
     this.info = points;    
+  }
+
+  componentDidMount(){    
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {        
+        this.location.lat = parseFloat(position.coords.latitude);
+        this.location.lang = parseFloat(position.coords.longitude);
+      },
+      (error) => {
+        this.location.lat = 0;
+        this.location.lang = 0;
+      },
+      { enableHighAccuracy: false }
+    );
   }
 
   /**
@@ -103,6 +126,17 @@ let styles = StyleSheet.create({
 });
 
 /**
+ * Map Redux store state to component props
+ * @param {state} state Redux store state
+ * @return {json} state json State from redux store state
+ */
+const mapStateToProps = (state) => {    
+  return {
+    stage: state.survey.stage
+  };
+};
+
+/**
  * Map Redux dispatches to component props
  * @param {object} dispatch Redux dispatches
  * @return {json} dispatch-json from redux dispatche
@@ -115,4 +149,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(PointLike);
+export default connect(mapStateToProps, mapDispatchToProps)(PointLike);

@@ -39,6 +39,11 @@ class PointEdit extends Component {
   constructor(props){
     super(props);
     this.info = [];
+
+    this.location = {
+      "lat": 0,
+      "lang": 0
+    }
   }
 
   /**
@@ -54,6 +59,11 @@ class PointEdit extends Component {
 
     this.info["dateTime"] = dateTime;
     this.info["mode"] = this.props.mode;
+
+    this.info["lat"] = this.location.lat;
+    this.info["lang"] = this.location.lang;
+    this.info["stage"] = this.props.stage;
+    
     setPointToFirebase(this.info, dateTime);
 
     this.props.editPoint(this.info, this.props.selectedIndex);
@@ -70,6 +80,21 @@ class PointEdit extends Component {
     this.info = points;
   }
 
+  componentDidMount(){    
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {        
+        this.location.lat = parseFloat(position.coords.latitude);
+        this.location.lang = parseFloat(position.coords.longitude);
+      },
+      (error) => {
+        this.location.lat = 0;
+        this.location.lang = 0;
+      },
+      { enableHighAccuracy: false }
+    );
+  }
+
   /**
     * delete an Item
     * @return {void}
@@ -79,7 +104,7 @@ class PointEdit extends Component {
     let pointInfo = this.props.pointInfo;    
     
     this.props.delPoint(this.props.selectedIndex);
-    delPointToFirebase(pointInfo[selectedIndex]["dateTime"]);
+    delPointToFirebase(pointInfo[selectedIndex]["dateTime"], pointInfo[selectedIndex]["stage"]);
     Actions.activity();
   }
 
@@ -140,7 +165,8 @@ let styles = StyleSheet.create({
  */
 const mapStateToProps = (state) => {    
   return {
-    pointInfo: state.point.pointInfo
+    pointInfo: state.point.pointInfo,
+    stage: state.survey.stage
   };
 };
 

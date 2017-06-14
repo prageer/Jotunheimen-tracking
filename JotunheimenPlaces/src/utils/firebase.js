@@ -9,10 +9,52 @@ const firebaseApp = initializeApp({
   storageBucket: config.STORAGE_BUCKET
 })
 
-//export const personalRef = firebaseApp.database().ref('personal');
-//export const recordsRef = firebaseApp.database().ref('records/'+DeviceInfo.getUniqueID()+'/');
+export function setLocalToFirebase(personalInfo, pointInfo, surveyInfo) {
+  /*
+  let testData = {
+    
+      "1497418859": {
+        item_0: 'Undisturbed nature',
+        item_1: 'Aesthetic/scenic',
+        item_2: 'Recreation activities',
+        dateTime: 1497418859,
+        mode: 'like'
+      }
+    ,    
+      "1497418866": {
+        item_0: 'Undisturbed nature',
+        item_1: 'Aesthetic/scenic',
+        item_2: 'Recreation activities',
+        dateTime: 1497418866,
+        mode: 'dislike'
+      }
+    
+  };
+  */
 
-function getPersonal(actions, cb){  
+  // personalInfo
+  const subRecordsRef = firebaseApp.database().ref('personal/' + DeviceInfo.getUniqueID() + '/');
+  subRecordsRef.set( personalInfo );
+
+
+  // pointInfo
+  let pointInfoForFirebase = {};
+  pointInfo.filter((item, index)=>{
+    pointInfoForFirebase[item.dateTime+'-'+item.stage] = item;
+  });
+
+  const subPointRef = firebaseApp.database().ref('point/' + DeviceInfo.getUniqueID() + '/');
+  subPointRef.set( pointInfoForFirebase );
+
+  // surveyInfo
+  let surveyInfoForFirebase = {};
+  surveyInfo.filter((item, index)=>{
+    surveyInfoForFirebase[item.dateTime+'-'+item.stage] = item;
+  });
+
+  const subSurveyRef = firebaseApp.database().ref('survey/' + DeviceInfo.getUniqueID() + '/');
+  subSurveyRef.set( surveyInfoForFirebase );
+
 }
 
 export function setPersonalToFirebase(info){
@@ -22,16 +64,16 @@ export function setPersonalToFirebase(info){
 
 export function setSurveyToFirebase(info){
   let dateTime = Math.floor(Date.now() / 1000)
-  const subRecordsRef = firebaseApp.database().ref('survey/' + DeviceInfo.getUniqueID() + '/' + dateTime + '/');
+  const subRecordsRef = firebaseApp.database().ref('survey/' + DeviceInfo.getUniqueID() + '/' + info.dateTime+'-'+info.stage + '/');
   subRecordsRef.set( info );
 }
 
-export function setPointToFirebase(info, dateTime){  
-  const subRecordsRef = firebaseApp.database().ref('point/' + DeviceInfo.getUniqueID() + '/' + dateTime + '/');
+export function setPointToFirebase(info) {
+  const subRecordsRef = firebaseApp.database().ref('point/' + DeviceInfo.getUniqueID() + '/' + info.dateTime+'-'+info.stage + '/');
   subRecordsRef.set( info );
 }
 
-export function delPointToFirebase(dateTime){  
+export function delPointToFirebase(dateTime, stage) {
   const subRecordsRef = firebaseApp.database().ref('point/' + DeviceInfo.getUniqueID() + '/');
-  subRecordsRef.child( dateTime ).remove();
+  subRecordsRef.child( dateTime+'-'+stage ).remove();
 }
