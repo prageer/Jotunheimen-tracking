@@ -27,6 +27,8 @@ export default class TagList extends Component {
     this.state = {
       selIds: [0,2,3]
     }
+    
+    this.performTag();
   }
 
   /**
@@ -39,16 +41,25 @@ export default class TagList extends Component {
       this.setState(
         update(this.state, {
           selIds: { $push: [key] }
-        })
+        }), this.performTag
       );
     }else{
       let index = Object.keys(this.state.selIds)[Object.values(this.state.selIds).indexOf(key)];
       this.setState(
         update(this.state, {
           selIds: { $splice: [[index, 1]] }
-        })
+        }), this.performTag
       );
-    }
+    }    
+  }
+
+  performTag() {
+    let tags = {};
+    this.state.selIds.map((item, index)=>{
+      tags["item_"+index] = this.props.items[item].label;
+      return null;
+    })
+    this.props.getPoint(tags);
   }
 
   /**
@@ -56,7 +67,7 @@ export default class TagList extends Component {
    * @return {jsxresult} result in jsx format
    */
   render() {
-    let {items, mode} = this.props;
+    let {items, mode} = this.props;    
 
     return (
       <View style={{flex:1, marginLeft:20, marginRight:20}}>

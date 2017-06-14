@@ -2,7 +2,7 @@ import * as types from '../actions/ActionTypes';
 import update from 'react-addons-update';
 
 const initialState = {
-  surveyInfo: ""
+  surveyInfo: []
 };
 
 /**
@@ -17,9 +17,11 @@ export default function survey(state, action) {
   }
 
   switch(action.type) {
-  case types.SET_SURVEY:
+  case types.ADD_SURVEY:
     return update(state, {
-      surveyInfo: {$set: action.surveyInfo}
+      surveyInfo: {
+        [state.surveyInfo.length]: {$set: action.surveyInfo}
+      }
     });
   default:
     return state;

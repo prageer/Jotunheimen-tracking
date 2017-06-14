@@ -1,14 +1,14 @@
 import {
-  SET_SURVEY
+  ADD_SURVEY
 } from './ActionTypes';
 
 /**
  * Set Survey
  * @return {json}
  */
-export function setSurvey(surveyInfo) {
+export function addSurvey(surveyInfo) {
   return {
-    type: SET_SURVEY,
+    type: ADD_SURVEY,
     surveyInfo
   };
 }

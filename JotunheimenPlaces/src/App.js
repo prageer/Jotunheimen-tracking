@@ -40,9 +40,9 @@ class App extends Component {
           <Scene key="welcome" component={Welcome} />
           <Scene key="instruction" component={Instruction} />
           <Scene key="consent" component={Consent} />
-          <Scene key="demographics" component={Demographics} initial={true}  />
+          <Scene key="demographics" component={Demographics} />
           <Scene key="indexsurvey" component={IndexSurvey} />
-          <Scene key="activity" component={Activity} />
+          <Scene key="activity" component={Activity} initial={true} />
           <Scene key="trackingsurvey" component={TrackingSurvey} />
           <Scene key="end" component={End} />
           <Scene key="pointlike" component={PointLike} />

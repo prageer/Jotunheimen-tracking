@@ -23,6 +23,9 @@ import {connect} from 'react-redux';
 import {  
   setDemographics
 } from '../actions/demographics';
+
+import {setPersonalToFirebase} from '../utils/firebase';
+
 /**
  * Container component for Demographics page
  */
@@ -50,9 +53,10 @@ class Demographics extends Component {
     * Handle Start Activity Click Event
     * @return {void}
     */
-  startActivity(){
-    console.log(this.info);    
-    Actions.indexsurvey();
+  startActivity(){    
+    this.props.setDemographics( this.info );
+    setPersonalToFirebase(this.info);    
+    //Actions.indexsurvey();
   }
 
   /**

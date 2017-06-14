@@ -19,6 +19,14 @@ const {
 } = ReactNative;
 import likePoints from '../constants/likePoints';
 
+import {connect} from 'react-redux';
+
+import {  
+  setPoint
+} from '../actions/point';
+
+import {setPointToFirebase} from '../utils/firebase';
+
 /**
  * Container component for PointLike page
  */
@@ -29,8 +37,24 @@ class PointLike extends Component {
     * @param {props} props from parent component
     * @return {void}
     */
-  constructor(props){
-    super(props);    
+  constructor(props) {
+    super(props);
+    this.info = [];
+  }
+
+  onBackToActivity() {
+    let dateTime = Math.floor(Date.now() / 1000);
+    this.info["dateTime"] = dateTime;
+    this.info["mode"] = this.props.mode;
+    
+    setPointToFirebase(this.info, dateTime);
+    this.props.setPoint(this.info);
+    
+    Actions.activity({mode: this.props.mode});
+  }
+
+  getPoint(points) {
+    this.info = points;    
   }
 
   /**
@@ -51,10 +75,10 @@ class PointLike extends Component {
       <View
         style={styles.container}>
         <View style={{flex:1.5, alignItems:'center', flexDirection: 'row', marginLeft:20}}>
-          <ButtonCircle onPress={()=>{Actions.activity({mode:mode})}} backgroundColor="white">{backStr}</ButtonCircle>
+          <ButtonCircle onPress={this.onBackToActivity.bind(this)} backgroundColor="white">{backStr}</ButtonCircle>
         </View>
         <View style={{flex:7, justifyContent: 'center'}}>
-          <TagList items={likePointsList} mode={mode} />
+          <TagList items={likePointsList} mode={mode} getPoint={this.getPoint.bind(this)} />
         </View>          
       </View>
     );
@@ -70,4 +94,17 @@ let styles = StyleSheet.create({
   }  
 });
 
-export default PointLike;
+/**
+ * Map Redux dispatches to component props
+ * @param {object} dispatch Redux dispatches
+ * @return {json} dispatch-json from redux dispatche
+ */
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setPoint: (pointInfo) => {
+      return dispatch(setPoint(pointInfo));
+    }
+  };
+};
+
+export default connect(null, mapDispatchToProps)(PointLike);

@@ -26,8 +26,12 @@ class Activity extends Component {
     * @param {props} props from parent component
     * @return {void}
     */
-  constructor(props){
+  constructor(props) {
     super(props);
+  }
+
+  onClickLike() {    
+    Actions.pointlike({mode:'like'});
   }
 
   /**
@@ -83,7 +87,7 @@ class Activity extends Component {
         style={styles.container}>
         <ScrollView>
           <View style={{}}>
-            <TouchableOpacity style={styles.button} onPress={()=>{Actions.pointlike({mode:'like'});}}>
+            <TouchableOpacity style={styles.button} onPress={this.onClickLike.bind(this)}>
               <View style={{flex:1, flexDirection: 'row'}}>
                 <View style={{flex:0.3, justifyContent:'center', alignItems:'center'}}>
                   <Image style={{resizeMode: 'contain', height:'80%'}} source={require('../assets/smile-big.png')} />

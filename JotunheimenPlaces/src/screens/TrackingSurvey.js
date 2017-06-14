@@ -24,6 +24,15 @@ import mark from '../constants/mark';
 import negatives from '../constants/negatives';
 import experienceMark from '../constants/experienceMark';
 
+import {connect} from 'react-redux';
+
+import {  
+  addSurvey
+} from '../actions/survey';
+
+import {setSurveyToFirebase} from '../utils/firebase';
+
+
 /**
  * Container component for TrackingSurvey page
  */
@@ -50,6 +59,16 @@ class TrackingSurvey extends Component {
       iComment: '',
       iEmail: ''
     }
+  }
+
+  /**
+    * Handle Send Survey Click Event
+    * @return {void}
+    */
+  sendSurvey(){
+    this.props.addSurvey( this.info );
+    setSurveyToFirebase(this.info);    
+    //Actions.end();
   }
 
   /**
@@ -221,8 +240,9 @@ class TrackingSurvey extends Component {
               <Text style={styles.headTextContainer}>Thank you very much for your participation!</Text>
             </View>
             <View style={{marginLeft:20, marginRight:20, marginBottom:20, marginTop:20}}>
-              <Button onPress={()=>{Actions.end();}}>Send</Button>
+              <Button onPress={this.sendSurvey.bind(this)}>Send</Button>
             </View>
+            <Text>{this.props.surveyInfo.length}</Text>
           </View>
         </ScrollView>
       </View>
@@ -259,4 +279,28 @@ let styles = StyleSheet.create({
   }
 });
 
-export default TrackingSurvey;
+/**
+ * Map Redux store state to component props
+ * @param {state} state Redux store state
+ * @return {json} state json State from redux store state
+ */
+const mapStateToProps = (state) => {    
+  return {
+    surveyInfo: state.survey.surveyInfo
+  };
+};
+
+/**
+ * Map Redux dispatches to component props
+ * @param {object} dispatch Redux dispatches
+ * @return {json} dispatch-json from redux dispatche
+ */
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addSurvey: (surveyInfo) => {
+      return dispatch(addSurvey(surveyInfo));
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(TrackingSurvey);
