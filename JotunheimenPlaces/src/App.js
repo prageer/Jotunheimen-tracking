@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import ReactNative from 'react-native';
-import {Scene, Router} from 'react-native-router-flux';
+import {ActionConst, Scene, Router} from 'react-native-router-flux';
 import Welcome from './screens/Welcome';
 import Consent from './screens/Consent';
 import Instruction from './screens/Instruction';
@@ -31,6 +31,7 @@ class App extends Component {
   }
 
   componentDidMount() {
+    console.log("App Did Mount");
     setLocalToFirebase( this.props.personalInfo, this.props.pointInfo, this.props.surveyInfo );
   }
 
@@ -49,7 +50,7 @@ class App extends Component {
 
     return ( 
       <Router>
-        <Scene key="root" hideNavBar={true}>
+        <Scene key="root" hideNavBar={true} hideTabBar={true} hideOnChildTabs={true}>
           <Scene key="instruction" component={Instruction} />
           <Scene key="welcome" component={Welcome} initial={welcomeInitial} />
           <Scene key="consent" component={Consent} />
