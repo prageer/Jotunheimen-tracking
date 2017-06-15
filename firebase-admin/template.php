@@ -104,12 +104,22 @@
 					Records
 					<img src="img/toggle-subnav-down.png" alt="">
 				</a>
-				<ul class='collapsed-nav'>
-					<li <?php if($_REQUEST['page']=='records'){?>class='active'<?php }?>>
-						<a href="index.php?page=records">
-							Records
+				<ul class='collapsed-nav'>											
+					<li <?php if($_REQUEST['page']=='personal'){?>class='active'<?php }?>>
+						<a href="index.php?page=personal">
+							Personal
 						</a>
-					</li>								
+					</li>
+					<li <?php if($_REQUEST['page']=='point'){?>class='active'<?php }?>>
+						<a href="index.php?page=point">
+							Tracks
+						</a>
+					</li>
+					<li <?php if($_REQUEST['page']=='survey'){?>class='active'<?php }?>>
+						<a href="index.php?page=survey">
+							Surveys
+						</a>
+					</li>
 				</ul>
 			</li>		
 			

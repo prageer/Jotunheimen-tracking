@@ -11,23 +11,48 @@ $TemplateFile="template.php";
 $page=$_REQUEST['page'];
 
 require './lib/firebaseLib.php';
-$url = 'https://jotunheimen-80f9e.firebaseio.com';
-$token = 'LonvcGzKKy90XubS6A9Y2iDkTnHQaF1JA1eLUuK5';
+include('config.php');
 $firebase = new Firebase\FirebaseLib($url, $token);
 
 if (isset($_SESSION['AdminUser'])) {
 	switch($page)
-	{		
-	
-	case "records";
+	{
+
+	case "personal";
 		  {
 		   
-			$Title="Records";
+			$Title="Personal Data";
 
-			$records = $firebase->get('/records');		
-			$records = json_decode($records, true);
+			$personal = $firebase->get('/personal');
+			$personal = json_decode($personal, true);
 
-			$MiddleContents["page"]="views/records.php";
+			$MiddleContents["page"]="views/personal.php";
+			include($TemplateFile);
+			break;
+	}
+
+	case "point";
+		  {
+		   
+			$Title="Tracks";
+
+			$point = $firebase->get('/point');
+			$point = json_decode($point, true);
+
+			$MiddleContents["page"]="views/point.php";
+			include($TemplateFile);
+			break;
+	}
+
+	case "survey";
+		  {
+		   
+			$Title="Survey";
+
+			$survey = $firebase->get('/survey');
+			$survey = json_decode($survey, true);
+
+			$MiddleContents["page"]="views/survey.php";
 			include($TemplateFile);
 			break;
 	}
