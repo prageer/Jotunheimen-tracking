@@ -39,6 +39,7 @@ export function setLocalToFirebase(personalInfo, pointInfo, surveyInfo) {
 
   // pointInfo
   let pointInfoForFirebase = {};
+  //console.log(pointInfo);
   pointInfo.filter((item, index)=>{
     pointInfoForFirebase[item.dateTime+'-'+item.stage] = item;
   });

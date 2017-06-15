@@ -81,7 +81,20 @@ export default class ItemList extends Component {
         <RadioForm animation={true}>
           {items.map((obj, i) => {            
             
-            let radioStyle = (this.state.value3Index === i)?[styles.radio, styles.bg]:styles.radio;
+            let radioStyle = null;
+
+            if( this.state.value3Index === i ) {
+              if( i==0 )
+                radioStyle =[styles.radio, styles.bg, styles.radioFirst];
+              else
+                radioStyle = [styles.radio, styles.bg];
+            }else{
+              if( i==0 )
+                radioStyle =[styles.radio, styles.radioFirst];
+              else
+                radioStyle = [styles.radio];
+            }
+            
             let radioLabelStyle = (this.state.value3Index === i)?[styles.radioLabel, styles.bold]:styles.radioLabel;
             return (              
               <View key={i} style={radioStyle}>
@@ -130,10 +143,13 @@ var styles = StyleSheet.create({
     borderWidth:0.5,
     paddingTop:10,
     paddingBottom:5,
+    borderTopWidth:0,
     borderLeftWidth:0,
-    borderRightWidth:0,
-    borderBottomWidth:0.3,
+    borderRightWidth:0,    
     backgroundColor:'#EFEFEF'
+  },
+  radioFirst: {
+    borderTopWidth:0.5
   },
   bg:{
     backgroundColor:'#D0DB05'

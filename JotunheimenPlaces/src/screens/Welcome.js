@@ -23,8 +23,6 @@ class Welcome extends Component {
     */
   constructor(props){
     super(props);
-
-    this.orientation = 'landscape';
   }
 
   /**
@@ -37,13 +35,13 @@ class Welcome extends Component {
       <View
         style={styles.container}>
         <View style={{flex:4, justifyContent: 'center'}}>
-          <Motion defaultStyle={{scale: 0.4, opacity: 0}} style={{scale: spring(1, [200, 17]), opacity: spring(1)}}>
+          <Motion defaultStyle={{scale: 0.4, opacity: 0}} style={{scale: spring(1), opacity: spring(1)}}>
           {m =>
             <View style={{
               opacity: m.opacity, 
               alignItems: 'center'
             }}>
-              <Image style={{width: 297, transform: [{scale: m.scale}], marginBottom:30}} source={require('../assets/jotunheimen-logo.png')} />
+              <Image style={{transform: [{scale: m.scale}], marginBottom:30}} source={require('../assets/jotunheimen-logo.png')} />
               <View>
                 <Text style={styles.logoTextContainer}>Welcome to our Nature-Based Tourism App!</Text>
                 <Text style={styles.descTextContainer}>We want to improve nature-based tourism in Norway. We appreciate if you could spend a few minutes to map your sites and share your experiences. </Text>
@@ -53,22 +51,14 @@ class Welcome extends Component {
           </Motion>
         </View>
 
-        {this.orientation=='portrait' &&
-          (
-          <View style={{flex:1}}>
-          </View>
-          )
-        }
-
         <View style={{flex:1, alignItems:'center'}}>
-          <Motion defaultStyle={{scale: 0.4, opacity: 0}} style={{scale: spring(1, [200, 17]), opacity: spring(1)}}>
+          <Motion defaultStyle={{scale: 0.4, opacity: 0}} style={{scale: spring(1), opacity: spring(1)}}>
           {m =>
-            <ButtonCircle onPress={()=>Actions.consent()}>>></ButtonCircle>
+            <ButtonCircle onPress={()=>Actions.consent()} />
           }
           </Motion>
         </View>
-      </View>
-      
+      </View>      
       
     );
   }

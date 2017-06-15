@@ -15,6 +15,7 @@ import {
 } from '../actions/point';
 import {setPointToFirebase} from '../utils/firebase';
 import likePoints from '../constants/likePoints';
+import dislikePoints from '../constants/dislikePoints';
 
 const {
   Image,
@@ -40,7 +41,7 @@ class PointLike extends Component {
     this.info = [];
     this.location = {
       "lat": 0,
-      "lang": 0
+      "long": 0
     }
   }
 
@@ -55,9 +56,9 @@ class PointLike extends Component {
     this.info["mode"] = this.props.mode;
 
     this.info["lat"] = this.location.lat;
-    this.info["lang"] = this.location.lang;
+    this.info["long"] = this.location.long;
     this.info["stage"] = this.props.stage;
-    
+    console.log(this.info);
     setPointToFirebase(this.info, dateTime);
     this.props.setPoint(this.info);
     
@@ -73,16 +74,20 @@ class PointLike extends Component {
     this.info = points;    
   }
 
+  /**
+    * Get location
+    * @return {void}
+    */
   componentDidMount(){    
 
     navigator.geolocation.getCurrentPosition(
       (position) => {        
         this.location.lat = parseFloat(position.coords.latitude);
-        this.location.lang = parseFloat(position.coords.longitude);
+        this.location.long = parseFloat(position.coords.longitude);
       },
       (error) => {
         this.location.lat = 0;
-        this.location.lang = 0;
+        this.location.long = 0;
       },
       { enableHighAccuracy: false }
     );
@@ -94,11 +99,13 @@ class PointLike extends Component {
    */
   render() {
 
-    const {mode} = this.props;
-
-    let backStr = "<<";
+    const {mode} = this.props;    
 
     let likePointsList = likePoints.map((item, key)=>{
+      return {'label': item.name, value: key};
+    });
+
+    let dislikePointsList = dislikePoints.map((item, key)=>{
       return {'label': item.name, value: key};
     });
     
@@ -106,10 +113,15 @@ class PointLike extends Component {
       <View
         style={styles.container}>
         <View style={{flex:1.5, alignItems:'center', flexDirection: 'row', marginLeft:20}}>
-          <ButtonCircle onPress={this.onBackToActivity.bind(this)} backgroundColor="white">{backStr}</ButtonCircle>
+          <ButtonCircle onPress={this.onBackToActivity.bind(this)} mode="prev-white" />
         </View>
         <View style={{flex:7, justifyContent: 'center'}}>
-          <TagList items={likePointsList} mode={mode} getPoint={this.getPoint.bind(this)} />
+          { 
+            (mode=="like")?
+              <TagList items={likePointsList} mode={mode} getPoint={this.getPoint.bind(this)} />
+            :
+              <TagList items={dislikePointsList} mode={mode} getPoint={this.getPoint.bind(this)} />
+          }
         </View>          
       </View>
     );

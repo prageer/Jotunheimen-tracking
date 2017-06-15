@@ -8,7 +8,8 @@ const {
   StyleSheet,
   Text,
   View,
-  ScrollView
+  ScrollView,
+  Linking
 } = ReactNative;
 
 /**
@@ -29,8 +30,7 @@ class Instruction extends Component {
    * Render Instruction page
    * @return {jsxresult} result in jsx format
    */
-  render() {    
-    let back_btn_str = "<<";
+  render() {
     return (
       
       <View
@@ -54,14 +54,14 @@ class Instruction extends Component {
                 4. Complete a survey about the experience you just had doing your nature activity TODAY only.
               </Text>
               <Text style={styles.descTextContainer}>
-                5. Press "Send" button when you have completed the survey. You will be able to withdraw from the study at any point by sending an email to lorena.munoz@uit.no
+                5. Press "Send" button when you have completed the survey. You will be able to withdraw from the study at any point by sending an email to <Text style={{textDecorationLine: "underline"}} onPress={()=>{Linking.openURL('mailto:lorena.munoz@uit.no?subject=&body=')}}>lorena.munoz@uit.no</Text>
               </Text>
             </View>            
           </ScrollView>
         </View>
         <View style={{flex:1, alignItems:'center', justifyContent: 'center'}}>
           <View>
-            <ButtonCircle onPress={()=>{Actions.indexsurvey();}}>{back_btn_str}</ButtonCircle>
+            <ButtonCircle onPress={()=>{Actions.indexsurvey();}} mode="prev-blue" />
           </View>
         </View>
       </View>

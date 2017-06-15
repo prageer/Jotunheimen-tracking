@@ -90,9 +90,16 @@ class TrackingSurvey extends Component {
     Actions.end();
   }
 
+  /**
+    * Check validate for user input
+    * @return {void}
+    */
   checkValidate(){
     let res = true;
     for(var i in this.info){
+      if( i=="iComment" || i=="iEmail"){
+        continue;
+      }
       if(this.info[i]===""){
         res = false;
       }
@@ -304,11 +311,12 @@ let styles = StyleSheet.create({
     color: 'red',
     fontSize: 20,
     marginLeft:20,
-    marginRight:20
+    marginRight:20,
+    marginTop:20
   },
   item:{
     marginBottom:20,
-    marginTop:20
+    marginTop:0
   }
 });
 

@@ -5,7 +5,8 @@ const {
   StyleSheet,
   Text,
   View,
-  TouchableOpacity
+  TouchableOpacity,
+  Image
 } = ReactNative;
 
 /**
@@ -17,44 +18,22 @@ export default class ButtonCircle extends Component {
    * Render a ButtonCircle
    * @return {jsxresult} result in jsx format
    */
-	render() {
+	render() {    
 
-    let btnStyle = [styles.button];
-    let txtStyle = [styles.whiteFont];
-    if( this.props.backgroundColor=="white" ){
-      btnStyle = [styles.button, styles.backWhite];
-      txtStyle = [styles.whiteFont, styles.colorBlack]
-    }
+    let imgBtn = null;
+    if( this.props.mode === undefined )
+      imgBtn = <Image source={require('../assets/next-blue.png')} />
+    else if( this.props.mode == "prev-blue" )
+      imgBtn = <Image source={require('../assets/prev-blue.png')} />
+    else if (this.props.mode == "prev-white" )
+      imgBtn = <Image source={require('../assets/prev-white.png')} />
+    else
+      imgBtn = <Image source={require('../assets/next-blue.png')} />
 
 		return (
-			<TouchableOpacity style={btnStyle} onPress={this.props.onPress}>
-				<Text style={txtStyle}>{this.props.children}</Text>
+			<TouchableOpacity onPress={this.props.onPress}>
+        {imgBtn}
 			</TouchableOpacity>
 		);
 	}
 }
-
-const styles = StyleSheet.create({
-  button: {
-    backgroundColor: '#00743C',
-    padding: 13,
-    alignItems: 'center',
-    borderWidth: 0,
-    borderRadius: 37,
-    paddingLeft: 19,
-    paddingRight: 19
-  },
-  backWhite: {
-    backgroundColor: 'white',
-    borderWidth:1
-  },
-  whiteFont: {
-    color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 30,
-    lineHeight:40
-  },
-  colorBlack: {
-    color: 'black'
-  }
-});

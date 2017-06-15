@@ -25,7 +25,7 @@ export default class TagList extends Component {
   constructor(props){
     super(props);
     this.state = {
-      selIds: [0,2,3]
+      selIds: []
     }
     
     this.performTag();
@@ -39,7 +39,6 @@ export default class TagList extends Component {
     });
     return contains;
   }
-
 
   componentDidMount(){
     if (this.props.selectedIndex != undefined ){

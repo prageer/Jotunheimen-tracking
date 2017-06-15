@@ -10,7 +10,9 @@ const {
   StyleSheet,
   Text,
   View,
-  ScrollView
+  ScrollView,
+  TouchableHighlight,
+  Linking
 } = ReactNative;
 
 /**
@@ -51,9 +53,9 @@ class Consent extends Component {
               The data will be treated as confidential and will not be passed on to any other party. No personally identifiable information will be used in reports or publications.
             </Text>
             <Text style={styles.descTextContainer}>
-              For any queries please contact Lorena Muñoz lorena.munoz@uit.no or Vera Hausner vera.hausner@uit.no
+              For any queries please contact Lorena Muñoz <Text style={{textDecorationLine: "underline"}} onPress={()=>{Linking.openURL('mailto:lorena.munoz@uit.no?subject=&body=')}}>lorena.munoz@uit.no</Text> or Vera Hausner <Text style={{textDecorationLine: "underline"}} onPress={()=>{Linking.openURL('mailto:vera.hausner@uit.no?subject=&body=')}}>vera.hausner@uit.no</Text>
             </Text>                
-          </View>
+          </View>          
         </ScrollView>
         <View>
           <Text style={{height: 30}}>                
@@ -61,7 +63,7 @@ class Consent extends Component {
           <Button onPress={()=>Actions.demographics()}>Accept Terms</Button>
           <Text style={{height: 10}}>                
           </Text>
-          <ButtonRedFlat onPress={()=>{}}>Exit the Survey</ButtonRedFlat>
+          <ButtonRedFlat onPress={()=>Actions.welcome()}>Exit the Survey</ButtonRedFlat>
         </View>
       </View>
       

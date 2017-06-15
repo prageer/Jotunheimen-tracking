@@ -7,6 +7,10 @@ import ButtonRedBorder from '../components/ButtonRedBorder';
 import Modal from 'react-native-modalbox';
 
 import {connect} from 'react-redux';
+import {  
+  setPoint
+} from '../actions/point';
+import {setPointToFirebase} from '../utils/firebase';
 
 const {
   Image,
@@ -30,8 +34,18 @@ class Activity extends Component {
     */
   constructor(props) {
     super(props);
+
+    this.location = {
+      "lat": 0,
+      "long": 0
+    }
   }
 
+  /**
+    * Date format
+    * @param {int} time stamp
+    * @return {void}
+    */
   dateFormat(val) {
     let now = new Date(val*1000);
   
@@ -47,6 +61,55 @@ class Activity extends Component {
   }
 
   /**
+    * Show finish modal
+    * @return {void}
+    */
+  finishActivity() {   
+    this.refs.modal3.open();
+  }
+
+  /**
+    * Go next page, Survey page
+    * @return {void}
+    */
+  goSurvey() {
+    let info = {};
+    let dateTime = Math.floor(Date.now() / 1000);
+    info["dateTime"] = dateTime;
+    info["mode"] = "finish";
+
+    info["lat"] = this.location.lat;
+    info["long"] = this.location.long;
+    info["stage"] = this.props.stage;      
+
+    setPointToFirebase(info, dateTime);
+    this.props.setPoint(info);
+
+    Actions.trackingsurvey();
+  }
+
+  /**
+    * Get location
+    * @return {void}
+    */
+  componentDidMount(){    
+    // start
+    if( !this.props.continue ){
+      navigator.geolocation.getCurrentPosition(
+        (position) => {        
+          this.location.lat = parseFloat(position.coords.latitude);
+          this.location.long = parseFloat(position.coords.longitude);
+        },
+        (error) => {
+          this.location.lat = 0;
+          this.location.long = 0;
+        },
+        { enableHighAccuracy: false }
+      );
+    }
+  }
+
+  /**
    * Render Activity page
    * @return {jsxresult} result in jsx format
    */
@@ -56,7 +119,7 @@ class Activity extends Component {
     let likeList = null;
 
     likeList = pointInfo.map((item, index)=>{
-      if( item.stage != this.props.stage )
+      if( item.stage != this.props.stage || item.mode=="start" || item.mode=="finish" )
         return null;
 
       let activityMode = item.mode;
@@ -69,7 +132,7 @@ class Activity extends Component {
 
       let pointText = "";
       for(var key in item){
-        if( key == "dateTime" || key == "mode" || key == "lat" || key == "lang" || key == "stage")
+        if( key == "dateTime" || key == "mode" || key == "lat" || key == "long" || key == "stage")
           continue;
         pointText += item[key] + ", ";
       }
@@ -91,7 +154,7 @@ class Activity extends Component {
     });
 
     likeList = likeList.filter(function(n){ return n != null });
-
+    likeList = likeList.reverse();
     return (
       
       <View
@@ -127,10 +190,10 @@ class Activity extends Component {
             </Text>
           </View>
           <View style={{}}>
-            <ButtonRedBorder onPress={()=>{this.refs.modal3.open()}}>FINISH ACTIVITY</ButtonRedBorder>
+            <ButtonRedBorder onPress={this.finishActivity.bind(this)}>FINISH ACTIVITY</ButtonRedBorder>
             <View style={{height:20}}>
             </View>
-            {( likeList.length == 0 ) && (<ButtonRedFlat onPress={()=>{Actions.indexsurvey();}}>Cancel</ButtonRedFlat> )}
+            {( likeList.length == 0 ) && (<ButtonRedFlat onPress={()=>{Actions.indexsurvey({continue:true});}}>Cancel</ButtonRedFlat> )}
           </View>
           
           {(likeList.length != 0 ) && likeList}
@@ -139,7 +202,7 @@ class Activity extends Component {
 
         <Modal style={[styles.modal, styles.modal3]} position={"center"} ref={"modal3"} >
           <Text style={{color:'black', marginBottom: 20, fontSize: 18, textAlign: 'center'}}>Are you sure you want to end journey and send the waypoints?</Text>
-          <TouchableOpacity style={{margin: 20, borderWidth: 2,borderRightWidth: 4, borderBottomWidth: 4}} onPress={()=>{Actions.trackingsurvey();}}>
+          <TouchableOpacity style={{margin: 20, borderWidth: 2,borderRightWidth: 4, borderBottomWidth: 4}} onPress={this.goSurvey.bind(this)}>
             <Text style={{color:'black', padding: 10, fontSize: 15, textAlign: 'center'}}>Yes, end journey and go to questionnaries</Text>
           </TouchableOpacity>
           <TouchableOpacity style={{margin:20}} onPress={()=>{ this.refs.modal3.close() }} >
@@ -214,4 +277,17 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, null)(Activity);
+/**
+ * Map Redux dispatches to component props
+ * @param {object} dispatch Redux dispatches
+ * @return {json} dispatch-json from redux dispatche
+ */
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setPoint: (pointInfo) => {
+      return dispatch(setPoint(pointInfo));
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Activity);

@@ -4,6 +4,7 @@ import ButtonCircle from '../components/ButtonCircle';
 import InputText from '../components/InputText';
 import SelectBox from '../components/SelectBox';
 import ItemList from '../components/ItemList';
+import FlatList from '../components/FlatList';
 import Button from '../components/Button';
 import {Motion, spring} from 'react-motion';
 import { Actions } from 'react-native-router-flux';
@@ -11,6 +12,7 @@ import { Actions } from 'react-native-router-flux';
 import gender from '../constants/gender';
 import education from '../constants/education';
 import tax from '../constants/tax';
+import moneyType from '../constants/moneyType';
 
 import {connect} from 'react-redux';
 
@@ -48,6 +50,7 @@ class Demographics extends Component {
       sGender: '',
       iAge: '',
       sEducation: '',
+      sMoneyType: '',
       sTax: '',
       iHowMany: ''
     }
@@ -73,12 +76,15 @@ class Demographics extends Component {
       )
       return;
     }
-    
     this.props.setDemographics( this.info );
     setPersonalToFirebase(this.info);    
     Actions.indexsurvey();
   }
 
+  /**
+    * Check validate for user input data
+    * @return {void}
+    */
   checkValidate(){
     let res = true;
     for(var i in this.info){
@@ -155,6 +161,10 @@ class Demographics extends Component {
     this.info.sTax = value;
   }
 
+  onChangeMoneyType(value){
+    this.info.sMoneyType = value;    
+  }
+
   /**
     * Get How many times
     * @param {str} value - times
@@ -175,6 +185,9 @@ class Demographics extends Component {
     let educationList = education.map((item, key)=>{
       return {'label': item.name, value: key};
     })
+    let moneyTypeList = moneyType.map((item, key)=>{
+      return {'label': item.name, value: key};
+    });
     let taxList = tax.map((item, key)=>{
       return {'label': item.name, value: key};
     })
@@ -219,6 +232,7 @@ class Demographics extends Component {
             <View style={styles.item}>
               <Text style={styles.questionTextContainer}>5. What was the approximate total after-tax income of your household for year 2014?</Text>
               <Text style={styles.questionTextContainer}>Choose only 1 [optional question]</Text>              
+              <FlatList items={moneyTypeList} handleChangeItem = {this.onChangeMoneyType.bind(this)} />
               <ItemList items={taxList} handleChangeItem = {this.onChangeTax.bind(this)} />
             </View>
             <View style={styles.item}>

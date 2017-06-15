@@ -31,7 +31,6 @@ class App extends Component {
   }
 
   componentDidMount() {
-    console.log("App Did Mount");
     setLocalToFirebase( this.props.personalInfo, this.props.pointInfo, this.props.surveyInfo );
   }
 
@@ -41,12 +40,39 @@ class App extends Component {
    */
   render() {
 
+    // find First Page
+
     let welcomeInitial = false;
     let indexSurveyInitial = false;
+    let activityContinue = false;
+    let trackingSurveyInitial = false;
+
     if(this.props.personalInfo.iResidence == undefined)
       welcomeInitial = true;
     else
       indexSurveyInitial = true;
+    
+    
+    if(this.props.pointInfo.length !== 0){
+      let lastStage = this.props.pointInfo[this.props.pointInfo.length-1]["stage"];
+      let mode = this.props.pointInfo[this.props.pointInfo.length-1]["mode"];
+      if( lastStage == this.props.stage ){
+        activityContinue = true;        
+      }
+
+      if( mode == "finish"){
+        trackingSurveyInitial = true;
+        welcomeInitial = false;
+        indexSurveyInitial = false;
+      }
+
+      if( lastStage < this.props.stage ){
+        indexSurveyInitial = true;        
+        trackingSurveyInitial = false;
+        welcomeInitial = false;
+      }
+    }
+    
 
     return ( 
       <Router>
@@ -55,9 +81,9 @@ class App extends Component {
           <Scene key="welcome" component={Welcome} initial={welcomeInitial} />
           <Scene key="consent" component={Consent} />
           <Scene key="demographics" component={Demographics} />
-          <Scene key="indexsurvey" component={IndexSurvey} initial={indexSurveyInitial} />
-          <Scene key="activity" component={Activity} />
-          <Scene key="trackingsurvey" component={TrackingSurvey} />
+          <Scene key="indexsurvey" component={IndexSurvey} initial={indexSurveyInitial} continue={activityContinue}/>
+          <Scene key="activity" component={Activity}  />
+          <Scene key="trackingsurvey" component={TrackingSurvey} initial={trackingSurveyInitial} />
           <Scene key="end" component={End} />
           <Scene key="pointlike" component={PointLike} />
           <Scene key="pointedit" component={PointEdit} />
@@ -76,7 +102,8 @@ const mapStateToProps = (state) => {
   return {
     personalInfo: state.demographics.personalInfo,
     pointInfo: state.point.pointInfo,
-    surveyInfo: state.survey.surveyInfo
+    surveyInfo: state.survey.surveyInfo,
+    stage: state.survey.stage,
   };
 };
 

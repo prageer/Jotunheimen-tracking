@@ -33,7 +33,7 @@ class End extends Component {
         <View>
           <Text style={{fontSize: 15, fontWeight: 'bold', textAlign: 'center', color: 'black'}}>All information is submitted now.</Text>
           <Text style={{fontSize: 15, fontWeight: 'bold', textAlign: 'center', color: 'black'}}>Thank you very much!</Text>
-          <TouchableOpacity style={{margin: 20, marginTop: 40, borderWidth: 2,borderRightWidth: 4, borderBottomWidth: 4}} onPress={()=>{Actions.indexsurvey()}}>
+          <TouchableOpacity style={{margin: 20, marginTop: 40, borderWidth: 2,borderRightWidth: 4, borderBottomWidth: 4}} onPress={()=>{Actions.indexsurvey({continue: false})}}>
             <Text style={{color:'black', padding: 10, textAlign:'center'}}>Close</Text>
           </TouchableOpacity>
         </View>

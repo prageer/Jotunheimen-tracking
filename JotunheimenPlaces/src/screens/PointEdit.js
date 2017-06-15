@@ -44,7 +44,7 @@ class PointEdit extends Component {
 
     this.location = {
       "lat": 0,
-      "lang": 0
+      "long": 0
     }
   }
 
@@ -63,7 +63,7 @@ class PointEdit extends Component {
     this.info["mode"] = this.props.mode;
 
     this.info["lat"] = this.location.lat;
-    this.info["lang"] = this.location.lang;
+    this.info["long"] = this.location.long;
     this.info["stage"] = this.props.stage;
     
     setPointToFirebase(this.info, dateTime);
@@ -82,16 +82,20 @@ class PointEdit extends Component {
     this.info = points;
   }
 
+  /**
+    * Get location
+    * @return {void}
+    */
   componentDidMount(){    
 
     navigator.geolocation.getCurrentPosition(
       (position) => {        
         this.location.lat = parseFloat(position.coords.latitude);
-        this.location.lang = parseFloat(position.coords.longitude);
+        this.location.long = parseFloat(position.coords.longitude);
       },
       (error) => {
         this.location.lat = 0;
-        this.location.lang = 0;
+        this.location.long = 0;
       },
       { enableHighAccuracy: false }
     );
@@ -128,9 +132,7 @@ class PointEdit extends Component {
    */
   render() {
 
-    const {mode} = this.props;
-
-    let backStr = "<<";
+    const {mode} = this.props;    
 
     let likePointsList = likePoints.map((item, key)=>{
       return {'label': item.name, value: key};
@@ -139,9 +141,9 @@ class PointEdit extends Component {
     return (
       <View
         style={styles.container}>
-        <View style={{flex:1.5,  flexDirection: 'row', justifyContent: 'space-between', marginLeft:20, marginRight:20}}>
+        <View style={{flex:1.5,  flexDirection: 'row', justifyContent: 'space-between', marginRight:20}}>
           <View style={{flex:0.3, justifyContent:'center', alignItems:'center'}}>
-            <ButtonCircle onPress={this.onBackToActivity.bind(this)} backgroundColor="white">{backStr}</ButtonCircle>
+            <ButtonCircle onPress={this.onBackToActivity.bind(this)} mode="prev-white" />
           </View>
           <View style={{flex:0.7, justifyContent:'center', alignItems:'flex-end'}}>
             <TouchableOpacity onPress={this.deletePoint.bind(this)}>
