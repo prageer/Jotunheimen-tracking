@@ -26,9 +26,7 @@ export default class TagList extends Component {
     super(props);
     this.state = {
       selIds: []
-    }
-    
-    this.performTag();
+    }    
   }
 
   isContains(json, value) {

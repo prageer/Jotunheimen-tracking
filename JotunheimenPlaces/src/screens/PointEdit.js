@@ -10,6 +10,7 @@ import {Motion, spring} from 'react-motion';
 import { Actions } from 'react-native-router-flux';
 
 import likePoints from '../constants/likePoints';
+import dislikePoints from '../constants/dislikePoints';
 import {connect} from 'react-redux';
 import {  
   delPoint,
@@ -79,6 +80,7 @@ class PointEdit extends Component {
     * @return {void}
     */
   getPoint(points) {
+    console.log(points);
     this.info = points;
   }
 
@@ -137,6 +139,9 @@ class PointEdit extends Component {
     let likePointsList = likePoints.map((item, key)=>{
       return {'label': item.name, value: key};
     });
+    let dislikePointsList = dislikePoints.map((item, key)=>{
+      return {'label': item.name, value: key};
+    });
     
     return (
       <View
@@ -153,7 +158,7 @@ class PointEdit extends Component {
         </View>
         <View style={{flex:7, justifyContent: 'center'}}>
           <TagList
-            items={likePointsList}
+            items={(mode=="like")?likePointsList:dislikePointsList}
             mode={mode}
             getPoint={this.getPoint.bind(this)}
             selectedIndex={this.props.selectedIndex}
