@@ -22,6 +22,8 @@ import {
 } from '../actions/survey';
 
 import {setSurveyToFirebase} from '../utils/firebase';
+import {validateEmail} from '../utils/utils';
+import config from '../../config';
 
 const {
   Image,
@@ -29,7 +31,8 @@ const {
   Text,
   View,  
   ScrollView,
-  TouchableOpacity
+  TouchableOpacity,
+  Alert
 } = ReactNative;
 
 /**
@@ -71,9 +74,34 @@ class TrackingSurvey extends Component {
     this.info["dateTime"] = dateTime;
     this.info["stage"] = this.props.stage;
 
+    if( !this.checkValidate() ){
+      Alert.alert(
+        config.INPUT_WARNING_TITLE,
+        config.INPUT_WARNING_CNT,
+        [          
+          {text: 'OK', onPress: () => { } }
+        ]
+      )
+      return;
+    }
+
     this.props.addSurvey( this.info );
     setSurveyToFirebase(this.info);    
     Actions.end();
+  }
+
+  checkValidate(){
+    let res = true;
+    for(var i in this.info){
+      if(this.info[i]===""){
+        res = false;
+      }
+      if( i=="iEmail"){
+        if( !validateEmail(this.info[i]) )
+          res = false;
+      }
+    }
+    return res;
   }
 
   /**

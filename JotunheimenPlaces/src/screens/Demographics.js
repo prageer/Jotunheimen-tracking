@@ -7,13 +7,7 @@ import ItemList from '../components/ItemList';
 import Button from '../components/Button';
 import {Motion, spring} from 'react-motion';
 import { Actions } from 'react-native-router-flux';
-const {
-  Image,
-  StyleSheet,
-  Text,
-  View,  
-  ScrollView
-} = ReactNative;
+
 import gender from '../constants/gender';
 import education from '../constants/education';
 import tax from '../constants/tax';
@@ -25,7 +19,17 @@ import {
 } from '../actions/demographics';
 
 import {setPersonalToFirebase} from '../utils/firebase';
+import {isNumeric} from '../utils/utils';
+import config from '../../config';
 
+const {
+  Image,
+  StyleSheet,
+  Text,
+  View,  
+  ScrollView,
+  Alert
+} = ReactNative;
 /**
  * Container component for Demographics page
  */
@@ -46,17 +50,47 @@ class Demographics extends Component {
       sEducation: '',
       sTax: '',
       iHowMany: ''
-    }    
+    }
+
+    this.state = {
+      clearPostal: false,
+      clearSelect: false
+    }
   }
 
   /**
     * Handle Start Activity Click Event
     * @return {void}
     */
-  startActivity(){    
+  startActivity(){
+    if( !this.checkValidate() ){
+      Alert.alert(
+        config.INPUT_WARNING_TITLE,
+        config.INPUT_WARNING_CNT,
+        [          
+          {text: 'OK', onPress: () => { } }
+        ]
+      )
+      return;
+    }
+    
     this.props.setDemographics( this.info );
     setPersonalToFirebase(this.info);    
     Actions.indexsurvey();
+  }
+
+  checkValidate(){
+    let res = true;
+    for(var i in this.info){
+      if(this.info[i]===""){
+        res = false;
+      }
+      if( i=="iAge" || i=="iHowMany"){
+        if( !isNumeric(this.info[i]) )
+          res = false;
+      }
+    }
+    return res;
   }
 
   /**
@@ -66,6 +100,10 @@ class Demographics extends Component {
     */
   onChangePostalCode(value){
     this.info.iResidence = value;
+
+    this.setState({
+      clearSelect: true
+    })
   }
 
   /**
@@ -75,6 +113,10 @@ class Demographics extends Component {
     */
   onChangeCountry(value){
     this.info.iResidence = value;
+
+    this.setState({
+      clearPostal: true
+    })
   }
 
   /**
@@ -146,8 +188,20 @@ class Demographics extends Component {
             <View style={styles.item}>
               <Text style={styles.questionTextContainer}>1. What is your country of residence?</Text>
               <Text style={styles.questionTextContainer}>Choose only 1</Text>
-              <InputText placeholder="Post code" floattext="Norway? Postal code:" handleChangeText={this.onChangePostalCode.bind(this)} />
-              <SelectBox placeholder="Other Country" floattext="Other Country:" handleChangeText={this.onChangeCountry.bind(this)} />
+              <InputText
+                placeholder="Post code"
+                floattext="Norway? Postal code:"
+                handleChangeText={this.onChangePostalCode.bind(this)}
+                clear={this.state.clearPostal}
+                cClear={()=>this.setState({clearPostal: false})}
+              />
+              <SelectBox
+                placeholder="Other Country"
+                floattext="Other Country:"
+                handleChangeText={this.onChangeCountry.bind(this)}
+                clear={this.state.clearSelect}
+                cClear={()=>this.setState({clearSelect: false})}
+              />
             </View>
             <View style={styles.item}>
               <Text style={styles.questionTextContainer}>2. What is your gender?</Text>

@@ -14,12 +14,28 @@ const {
 class InputText extends Component {
 
   constructor(props){
-    super(props);    
+    super(props);
+    this.state = {
+      textValue:""
+    }
   }
 
 
-  onChange(text) {    
+  onChange(text) {
+    this.setState({
+      textValue: text
+    })
     this.props.handleChangeText(text);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if( nextProps.clear == true )
+    {
+      this.setState({
+        textValue: ""
+      })
+      this.props.cClear();
+    }
   }
 
   /**
@@ -27,6 +43,7 @@ class InputText extends Component {
    * @return {jsxresult} result in jsx format
    */
 	render() {
+
 		return (
 			<View style={styles.button}>
           {
@@ -35,12 +52,14 @@ class InputText extends Component {
               <Text style={styles.floatText}>{this.props.floattext}</Text>
             )
           }
-				  <TextInput 
+
+          <TextInput 
             style={styles.whiteFont}
             underlineColorAndroid="transparent"
             placeholder={this.props.placeholder}
             onChangeText={this.onChange.bind(this)}
-          />
+            value={this.state.textValue}
+          />         
 			</View>
 		);
 	}

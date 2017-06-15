@@ -35,6 +35,16 @@ export default class selectBox extends Component {
     this.props.handleChangeText(option.label);
   }
   
+  componentWillReceiveProps(nextProps) {
+    if( nextProps.clear === true )
+    {
+      this.setState({
+        textInputValue: ''
+      })
+      this.props.cClear();
+    }
+  }
+
   /**
    * Render SelectBox
    * @return {jsxresult} result in jsx format
