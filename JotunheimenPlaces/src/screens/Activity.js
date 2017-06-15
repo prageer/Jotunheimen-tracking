@@ -32,6 +32,20 @@ class Activity extends Component {
     super(props);
   }
 
+  dateFormat(val) {
+    let now = new Date(val*1000);
+  
+    let year = now.getFullYear();
+    let month = now.getMonth()+1;
+    let date = now.getDate();
+
+    let hours = now.getHours();
+    let minutes = now.getMinutes();
+
+    let dateStr = date+'/'+month+'/'+year+' '+hours+':'+minutes;
+    return dateStr;
+  }
+
   /**
    * Render Activity page
    * @return {jsxresult} result in jsx format
@@ -55,7 +69,7 @@ class Activity extends Component {
 
       let pointText = "";
       for(var key in item){
-        if( key == "dateTime" || key == "mode" || key == "lat" || key == "lang")
+        if( key == "dateTime" || key == "mode" || key == "lat" || key == "lang" || key == "stage")
           continue;
         pointText += item[key] + ", ";
       }
@@ -68,7 +82,7 @@ class Activity extends Component {
               {smileIcon}
             </View>
             <View style={{flex:0.8, justifyContent:'center'}}>
-              <Text>{item.dateTime}</Text>              
+              <Text>{this.dateFormat(item.dateTime)}</Text>              
               <Text style={{marginRight:20}}>{pointText}</Text>
             </View>
           </View>

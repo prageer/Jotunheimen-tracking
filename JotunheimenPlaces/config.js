@@ -9,6 +9,11 @@ module.exports = {
   /*
   	Warning Alert Text for Input values
   */
-  INPUT_WARNING_TITLE:"Input Value Warning",
-  INPUT_WARNING_CNT:"Please check the input value"
+  INPUT_WARNING_TITLE: "Input Value Warning",
+  INPUT_WARNING_CNT: "Please check the input value",
+  /*
+    Delete Alert Text
+  */
+  DEL_TRACK_TITLE: "Delete This Track",
+  DEL_TRACK_CNT: "Are you sure to delete?"
 }

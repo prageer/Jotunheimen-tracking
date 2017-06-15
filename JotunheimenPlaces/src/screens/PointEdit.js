@@ -16,6 +16,7 @@ import {
   editPoint
 } from '../actions/point';
 import {delPointToFirebase, setPointToFirebase} from '../utils/firebase';
+import config from '../../config';
 
 const {
   Image,
@@ -23,7 +24,8 @@ const {
   Text,
   View,  
   ScrollView,
-  TouchableOpacity
+  TouchableOpacity,
+  Alert
 } = ReactNative;
 
 /**
@@ -100,12 +102,24 @@ class PointEdit extends Component {
     * @return {void}
     */
   deletePoint(){
-    let selectedIndex = this.props.selectedIndex;
-    let pointInfo = this.props.pointInfo;    
-    
-    this.props.delPoint(this.props.selectedIndex);
-    delPointToFirebase(pointInfo[selectedIndex]["dateTime"], pointInfo[selectedIndex]["stage"]);
-    Actions.activity();
+
+    Alert.alert(
+      config.DEL_TRACK_TITLE,
+      config.DEL_TRACK_CNT,
+      [
+        {text: 'Cancel', onPress: () => {} },
+        {text: 'OK', onPress: () => { 
+
+          let selectedIndex = this.props.selectedIndex;
+          let pointInfo = this.props.pointInfo;    
+          
+          this.props.delPoint(this.props.selectedIndex);
+          delPointToFirebase(pointInfo[selectedIndex]["dateTime"], pointInfo[selectedIndex]["stage"]);
+          Actions.activity();
+
+        } },
+      ]
+    )    
   }
 
   /**
