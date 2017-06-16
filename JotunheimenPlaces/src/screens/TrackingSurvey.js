@@ -98,14 +98,15 @@ class TrackingSurvey extends Component {
     let res = true;
     for(var i in this.info){
       if( i=="iComment" || i=="iEmail"){
-        continue;
+        if( i=="iEmail" && this.info[i] !="") {
+          if( !validateEmail(this.info[i]) )
+            res = false;
+        }else{
+          continue;
+        }
       }
       if(this.info[i]===""){
         res = false;
-      }
-      if( i=="iEmail"){
-        if( !validateEmail(this.info[i]) )
-          res = false;
       }
     }
     return res;
@@ -282,7 +283,6 @@ class TrackingSurvey extends Component {
             <View style={{marginLeft:20, marginRight:20, marginBottom:20, marginTop:20}}>
               <Button onPress={this.sendSurvey.bind(this)}>Send</Button>
             </View>
-            <Text>{this.props.surveyInfo.length}</Text>
           </View>
         </ScrollView>
       </View>

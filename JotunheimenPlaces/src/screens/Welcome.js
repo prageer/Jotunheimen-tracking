@@ -77,7 +77,6 @@ let styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight:'bold',
     fontStyle: 'normal',
-    fontFamily: 'Roboto',
     marginLeft:20,
     marginRight:15
   },

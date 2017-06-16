@@ -14,7 +14,7 @@ const {
 class InputTextArea extends Component {
 
   constructor(props){
-    super(props);    
+    super(props);
   }
 
   onChange(text) {    
@@ -58,7 +58,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     color: 'black',
     fontSize: 18,
-    paddingLeft:10
+    paddingLeft:10,
+    height: 100
   },
   floatText: {
     color: '#00743C',
