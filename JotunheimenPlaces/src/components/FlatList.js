@@ -107,7 +107,7 @@ var styles = StyleSheet.create({
   },
   radioLabel: {
     fontSize: 20, 
-    color: '#00743D', 
+    color: '#01743D', 
     textAlign: 'center'
   },
   bold: {

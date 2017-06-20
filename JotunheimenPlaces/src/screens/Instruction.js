@@ -80,14 +80,15 @@ let styles = StyleSheet.create({
     paddingRight: 20
   },
   headTextContainer: {
-    color: '#00743d',
+    color: '#01743D',
     fontSize: 20,    
-    fontWeight:'bold'
+    fontFamily: 'Roboto-Bold'
   },
   descTextContainer: {
-    color: '#00743d',
+    color: '#01743D',
+    fontFamily: 'Roboto-Regular',
     fontSize: 18,    
-    marginTop:5
+    marginTop:15
   },
   ovalText: {
     color:'white',

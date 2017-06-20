@@ -9,7 +9,7 @@ module.exports = {
   /*
   	Warning Alert Text for Input values
   */
-  INPUT_WARNING_TITLE: "Input Value Warning",
+  INPUT_WARNING_TITLE: "Please fill-in mandatory fields",
   INPUT_WARNING_CNT: "Please check the input value",
   /*
     Delete Alert Text

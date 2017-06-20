@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     marginLeft:20
   },
   whiteFont: {
-    borderColor: '#00743C',
+    borderColor: '#01743D',
     borderWidth: 1,
     color: 'black',    
     fontSize: 18,
@@ -81,8 +81,9 @@ const styles = StyleSheet.create({
     paddingLeft:10
   },
   floatText: {
-    color: '#00743C',
-    fontSize: 18
+    fontFamily: 'Roboto-Regular',
+    color: '#01743D',
+    fontSize: 20
   }
 });
 

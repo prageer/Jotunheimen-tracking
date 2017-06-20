@@ -26,7 +26,6 @@ export default class ItemList extends Component {
     super(props);
     this.state = {
       value3Index: null,
-      value3: null,
       viewOther: false
     }
   }  
@@ -39,7 +38,6 @@ export default class ItemList extends Component {
    */
   onPress(value, index) {
     this.setState({
-      value3: value,
       value3Index: index
     })
 
@@ -58,6 +56,14 @@ export default class ItemList extends Component {
 
   onChangeOther(value){
     this.props.handleChangeItem(value);
+  }
+
+  componentWillReceiveProps(nextProps){
+    if( nextProps.new != this.props.new ){
+      this.setState({
+        value3Index: null
+      })
+    }
   }
 
   /**
@@ -107,8 +113,8 @@ export default class ItemList extends Component {
                         index={i}
                         isSelected={this.state.value3Index === i}
                         onPress={this.onPress.bind(this, obj, i)}
-                        buttonInnerColor={'#00743C'}
-                        buttonOuterColor={'#00743C'}
+                        buttonInnerColor={'#01743D'}
+                        buttonOuterColor={'#01743D'}
                         buttonSize={15}
                         buttonStyle={{marginLeft: 10}}
                         buttonWrapStyle={{}}
@@ -156,10 +162,12 @@ var styles = StyleSheet.create({
   },
   radioLabel: {
     fontSize: 20, 
-    color: '#00743D', 
-    marginLeft:20
+    color: '#01743D', 
+    marginLeft: 20,
+    fontFamily: 'Roboto-Regular',
+    marginRight: 20
   },
   bold: {
-    fontWeight:'bold'
+    fontFamily: 'Roboto-Bold'
   }
 });

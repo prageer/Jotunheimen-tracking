@@ -31,13 +31,13 @@ const styles = StyleSheet.create({
     padding: 10,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: 'red',
+    borderColor: '#E4151F',
     marginLeft:20,
     marginRight:20
   },
   whiteFont: {
-    color: 'red',
-    fontWeight: 'bold',
-    fontSize: 24
+    color: '#E4151F',
+    fontFamily: 'Roboto-Bold',
+    fontSize: 32
   }
 });

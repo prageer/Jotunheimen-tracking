@@ -56,7 +56,7 @@ class Activity extends Component {
     let hours = now.getHours();
     let minutes = now.getMinutes();
 
-    let dateStr = date+'/'+month+'/'+year+' '+hours+':'+minutes;
+    let dateStr = date+'.'+month+'.'+year+' '+hours+':'+minutes;
     return dateStr;
   }
 
@@ -140,13 +140,13 @@ class Activity extends Component {
 
       return (
         <TouchableOpacity key={index} onPress={()=>{Actions.pointedit({mode: activityMode, selectedIndex: index }) }}>
-          <View style={{flex:1, flexDirection: 'row', marginBottom:10}}>
+          <View style={{flex:1, flexDirection: 'row', marginBottom:15}}>
             <View style={{flex:0.2, justifyContent:'center', alignItems:'center'}}>
               {smileIcon}
             </View>
             <View style={{flex:0.8, justifyContent:'center'}}>
-              <Text>{this.dateFormat(item.dateTime)}</Text>              
-              <Text style={{marginRight:20}}>{pointText}</Text>
+              <Text style={{fontFamily:'Roboto-Bold', color: 'black', fontSize: 14}}>{this.dateFormat(item.dateTime)}</Text>              
+              <Text style={{fontFamily:'Roboto-Bold', color: 'black', fontSize: 14, marginRight:20}}>{pointText}</Text>
             </View>
           </View>
         </TouchableOpacity>
@@ -201,12 +201,12 @@ class Activity extends Component {
         </ScrollView>
 
         <Modal style={[styles.modal, styles.modal3]} position={"center"} ref={"modal3"} >
-          <Text style={{color:'black', marginBottom: 20, fontSize: 18, textAlign: 'center'}}>Are you sure you want to end journey and send the waypoints?</Text>
+          <Text style={{color:'black', marginBottom: 20, fontSize: 18, textAlign: 'center', fontFamily:'Roboto-Regular'}}>Are you sure you want to end journey and send the waypoints?</Text>
           <TouchableOpacity style={{margin: 20, borderWidth: 2,borderRightWidth: 4, borderBottomWidth: 4}} onPress={this.goSurvey.bind(this)}>
-            <Text style={{color:'black', padding: 10, fontSize: 15, textAlign: 'center'}}>Yes, end journey and go to questionnaries</Text>
+            <Text style={{color:'black', padding: 10, fontSize: 15, textAlign: 'center', fontFamily:'Roboto-Regular'}}>Yes, end journey and go to questionnaries</Text>
           </TouchableOpacity>
           <TouchableOpacity style={{margin:20}} onPress={()=>{ this.refs.modal3.close() }} >
-            <Text style={{color:'blue', fontSize: 15}} >No, continue adding waypoints</Text>
+            <Text style={{color:'#2e4a6b', fontSize: 15, fontFamily:'Roboto-Regular', textDecorationLine:'underline'}} >No, continue adding waypoints</Text>
           </TouchableOpacity>
         </Modal>
       </View>
@@ -223,25 +223,26 @@ let styles = StyleSheet.create({
     justifyContent: 'center'
   },
   button: {
-    backgroundColor: '#00743C',    
+    backgroundColor: '#01743D',    
     borderWidth: 0,
     width:'100%',
     height:100
   },
   redBtn: {
-    backgroundColor: 'red'
+    backgroundColor: '#E4151F'
   },
   whiteFont: {
     color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 25
+    fontFamily: 'Roboto-Bold',
+    fontSize: 24
   },
   descText: {
-    color: '#00743C',
+    color: '#01743D',
     margin:20,
     marginRight:15,
     lineHeight:24,
-    fontSize:14
+    fontFamily: 'Roboto-Regular',
+    fontSize:15
   },
   instructBtn: {
     backgroundColor: 'green'

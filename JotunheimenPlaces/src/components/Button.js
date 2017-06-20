@@ -28,14 +28,14 @@ export default class Button extends Component {
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: '#00743C',
+    backgroundColor: '#01743D',
     padding: 15,
     alignItems: 'center',
     borderWidth: 0
   },
   whiteFont: {
     color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 18
+    fontFamily: 'Roboto-Light',
+    fontSize: 20
   }
 });

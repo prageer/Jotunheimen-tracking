@@ -12,6 +12,8 @@ import { Actions } from 'react-native-router-flux';
 import gender from '../constants/gender';
 import education from '../constants/education';
 import tax from '../constants/tax';
+import taxEuro from '../constants/taxEuro';
+import taxUsd from '../constants/taxUsd';
 import moneyType from '../constants/moneyType';
 
 import {connect} from 'react-redux';
@@ -23,14 +25,17 @@ import {
 import {setPersonalToFirebase} from '../utils/firebase';
 import {isNumeric} from '../utils/utils';
 import config from '../../config';
+import { findNodeHandle } from 'react-native';
+const RCTUIManager = require('NativeModules').UIManager;
 
 const {
   Image,
   StyleSheet,
   Text,
-  View,  
+  View,
   ScrollView,
-  Alert
+  Alert,
+  Dimensions
 } = ReactNative;
 /**
  * Container component for Demographics page
@@ -57,8 +62,28 @@ class Demographics extends Component {
 
     this.state = {
       clearPostal: false,
-      clearSelect: false
+      clearSelect: false,
+      taxList: [],
+      new: 0
     }
+    this.scrollHeight = 0;
+    this.deviceHeight = Dimensions.get("window").height;
+  }
+
+  componentDidMount() {
+    let taxNorList = tax.map((item, key)=>{
+      return {'label': item.name, value: key};
+    })
+    this.setState({
+      taxList: taxNorList
+    })
+  }
+
+  goPos(infoIndex){
+    var handle = findNodeHandle(this.refs[infoIndex+"Ref"]);
+    RCTUIManager.measure(handle, (x, y, width, height, pageX, pageY) => {
+      this.refs._scrollView.scrollTo({x:0, y:pageY+this.scrollHeight-this.deviceHeight, animated:true});
+    });
   }
 
   /**
@@ -66,12 +91,14 @@ class Demographics extends Component {
     * @return {void}
     */
   startActivity(){
-    if( !this.checkValidate() ){
+    let checkResult = this.checkValidate();
+
+    if( checkResult !== true ){
       Alert.alert(
         config.INPUT_WARNING_TITLE,
         config.INPUT_WARNING_CNT,
         [          
-          {text: 'OK', onPress: () => { } }
+          {text: 'OK', onPress: () => { this.goPos(checkResult) } }
         ]
       )
       return;
@@ -89,11 +116,11 @@ class Demographics extends Component {
     let res = true;
     for(var i in this.info){
       if(this.info[i]===""){
-        res = false;
+        return i;
       }
       if( i=="iAge" || i=="iHowMany"){
         if( !isNumeric(this.info[i]) )
-          res = false;
+          return i;
       }
     }
     return res;
@@ -162,7 +189,35 @@ class Demographics extends Component {
   }
 
   onChangeMoneyType(value){
-    this.info.sMoneyType = value;    
+    this.info.sMoneyType = value;
+    this.info.sTax = "";
+
+    let taxNorList = tax.map((item, key)=>{
+      return {'label': item.name, value: key};
+    })
+    let taxEuroList = taxEuro.map((item, key)=>{
+      return {'label': item.name, value: key};
+    })
+    let taxUsdList = taxUsd.map((item, key)=>{
+      return {'label': item.name, value: key};
+    })
+
+    if( value == "NOK" ){
+      this.setState({
+        taxList: taxNorList,
+        new: this.state.new + 1
+      })
+    }else if(value == "€ EURO"){
+      this.setState({
+        taxList: taxEuroList,
+        new: this.state.new + 1
+      })
+    }else if(value == "$ USD"){
+      this.setState({
+        taxList: taxUsdList,
+        new: this.state.new + 1
+      })
+    }
   }
 
   /**
@@ -188,18 +243,19 @@ class Demographics extends Component {
     let moneyTypeList = moneyType.map((item, key)=>{
       return {'label': item.name, value: key};
     });
-    let taxList = tax.map((item, key)=>{
-      return {'label': item.name, value: key};
-    })
 
     return (
       <View
         style={styles.container}>
-        <ScrollView>
-          <View>
+        <ScrollView ref='_scrollView' collapsable={false} removeClippedSubviews={false}
+          onContentSizeChange={(width, height) => {
+            this.scrollHeight = height;
+          }}
+        >
+          <View collapsable={false} removeClippedSubviews={false}>
             <Text style={styles.headTextContainer}>Personal Information</Text>
-            <View style={styles.item}>
-              <Text style={styles.questionTextContainer}>1. What is your country of residence?</Text>
+            <View style={styles.item} ref="iResidenceRef" collapsable={false}>
+              <Text style={styles.questionTextContainer}>1. What is your country of residence? (*)</Text>
               <Text style={styles.questionTextContainer}>Choose only 1</Text>
               <InputText
                 placeholder="Post code"
@@ -216,33 +272,35 @@ class Demographics extends Component {
                 cClear={()=>this.setState({clearSelect: false})}
               />
             </View>
-            <View style={styles.item}>
-              <Text style={styles.questionTextContainer}>2. What is your gender?</Text>
+            <View style={styles.item} ref="sGenderRef" collapsable={false}>
+              <Text style={styles.questionTextContainer}>2. What is your gender? (*)</Text>
               <ItemList items={genderList} handleChangeItem = {this.onChangeGender.bind(this)} />
             </View>
-            <View style={styles.item}>
-              <Text style={styles.questionTextContainer}>3. What is your age?</Text>
+            <View style={styles.item} ref="iAgeRef" collapsable={false}>
+              <Text style={styles.questionTextContainer}>3. What is your age? (*)</Text>
               <InputText placeholder="Age" handleChangeText={this.onChangeAge.bind(this)} />
             </View>
-            <View style={styles.item}>
-              <Text style={styles.questionTextContainer}>4. What is the highest education level you have completed?</Text>
+            <View style={styles.item} ref="sEducationRef" collapsable={false}>
+              <Text style={styles.questionTextContainer}>4. What is the highest education level you have completed? (*)</Text>
               <Text style={styles.questionTextContainer}>Choose only 1</Text>
               <ItemList items={educationList} handleChangeItem = {this.onChangeEducation.bind(this)} />
             </View>
-            <View style={styles.item}>
-              <Text style={styles.questionTextContainer}>5. What was the approximate total after-tax income of your household for year 2014?</Text>
+            <View style={{marginTop:20}} collapsable={false} ref="sMoneyTypeRef">
+              <Text style={styles.questionTextContainer}>5. What was the approximate total after-tax income of your household for year 2016? (*)</Text>
               <Text style={styles.questionTextContainer}>Choose only 1 [optional question]</Text>              
               <FlatList items={moneyTypeList} handleChangeItem = {this.onChangeMoneyType.bind(this)} />
-              <ItemList items={taxList} handleChangeItem = {this.onChangeTax.bind(this)} />
             </View>
-            <View style={styles.item}>
-              <Text style={styles.questionTextContainer}>6. How many times in the past have you visited this area?</Text>
+            <View style={{marginBottom:37}} ref="sTaxRef" collapsable={false}>
+              <ItemList items={this.state.taxList} handleChangeItem = {this.onChangeTax.bind(this)} new={this.state.new} />
+            </View>
+            <View style={styles.item} ref="iHowManyRef" collapsable={false}>
+              <Text style={styles.questionTextContainer}>6. How many times in the past have you visited this area? (*)</Text>
               <InputText handleChangeText={this.onChangeHowMany.bind(this)} />
             </View>
             <View style={styles.item}>
               <Text style={styles.headTextContainer}>Now you are ready to track your activity. Please do not stop tracking until you completely finish the activity. We would like you to create waypoints of places and tag them according to what you like or dislike in the place.</Text>
             </View>
-            <View style={{marginLeft:20, marginRight:20, marginBottom:20, marginTop:20}}>
+            <View style={{marginLeft:20, marginRight:20, marginBottom:20}}>
               <Button onPress={this.startActivity.bind(this)}>Start activity</Button>              
             </View>
           </View>
@@ -258,26 +316,27 @@ let styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'transparent',    
     flexDirection: 'column',
-    justifyContent: 'space-between'    
+    justifyContent: 'space-between'
   },
   headTextContainer: {
-    color: '#00743d',
+    color: '#01743D',
     fontSize: 20,    
-    fontWeight:'bold',
-    fontStyle: 'normal',
+    fontFamily:'Roboto-Bold',
     marginLeft: 20,
     marginTop: 20,
-    marginRight: 20
+    marginRight: 20,
+    marginBottom:28
   },
   questionTextContainer: {
-    color: 'red',
+    color: '#E4151F',
     fontSize: 20,
+    fontFamily:'Roboto-Bold',
     marginLeft:20,
     marginRight:20
   },
   item:{
-    marginBottom:20,
-    marginTop:20
+    marginBottom:60,
+    marginTop:0
   }
 });
 

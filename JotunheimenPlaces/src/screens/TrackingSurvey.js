@@ -5,6 +5,7 @@ import InputText from '../components/InputText';
 import InputTextArea from '../components/InputTextArea';
 import SelectBox from '../components/SelectBox';
 import ItemList from '../components/ItemList';
+import ItemMultiSelectList from '../components/ItemMultiSelectList';
 import Button from '../components/Button';
 import {Motion, spring} from 'react-motion';
 import { Actions } from 'react-native-router-flux';
@@ -24,6 +25,9 @@ import {
 import {setSurveyToFirebase} from '../utils/firebase';
 import {validateEmail} from '../utils/utils';
 import config from '../../config';
+import { findNodeHandle } from 'react-native';
+const RCTUIManager = require('NativeModules').UIManager;
+
 
 const {
   Image,
@@ -32,7 +36,8 @@ const {
   View,  
   ScrollView,
   TouchableOpacity,
-  Alert
+  Alert,
+  Dimensions
 } = ReactNative;
 
 /**
@@ -63,23 +68,33 @@ class TrackingSurvey extends Component {
       dateTime: 0,
       stage: 0
     }
+    this.scrollHeight = 0;
+    this.deviceHeight = Dimensions.get("window").height;
+  }
+
+  goPos(infoIndex){
+    var handle = findNodeHandle(this.refs[infoIndex+"Ref"]);
+    RCTUIManager.measure(handle, (x, y, width, height, pageX, pageY) => {
+      this.refs._scrollView.scrollTo({x:0, y:pageY+this.scrollHeight-this.deviceHeight, animated:true});
+    });
   }
 
   /**
     * Handle Send Survey Click Event
     * @return {void}
     */
-  sendSurvey(){
+  sendSurvey(){    
     let dateTime = Math.floor(Date.now() / 1000);
     this.info["dateTime"] = dateTime;
     this.info["stage"] = this.props.stage;
 
-    if( !this.checkValidate() ){
+    let checkResult = this.checkValidate();
+    if( checkResult !== true ){
       Alert.alert(
         config.INPUT_WARNING_TITLE,
         config.INPUT_WARNING_CNT,
-        [          
-          {text: 'OK', onPress: () => { } }
+        [
+          {text: 'OK', onPress: () => { this.goPos(checkResult) } }
         ]
       )
       return;
@@ -96,17 +111,18 @@ class TrackingSurvey extends Component {
     */
   checkValidate(){
     let res = true;
-    for(var i in this.info){
+    for(var i in this.info){      
       if( i=="iComment" || i=="iEmail"){
         if( i=="iEmail" && this.info[i] !="") {
           if( !validateEmail(this.info[i]) )
-            res = false;
+            return i;
         }else{
           continue;
         }
       }
       if(this.info[i]===""){
-        res = false;
+        //alert(i)
+        return i;
       }
     }
     return res;
@@ -235,49 +251,54 @@ class TrackingSurvey extends Component {
     return (
       <View
         style={styles.container}>
-        <ScrollView>
-          <View>
+        <ScrollView ref='_scrollView' collapsable={false} removeClippedSubviews={false}
+          onContentSizeChange={(width, height) => {
+            this.scrollHeight = height;
+          }}
+        >
+          <View collapsable={false} removeClippedSubviews={false}>
             <Text style={styles.headTextContainer}>Your visit today:</Text>            
-            <View style={styles.item}>
-              <Text style={styles.questionTextContainer}>7. What nature-based activites did you participate in during the tracking today? Click multiple if relevant</Text>
-              <ItemList items={activityList} handleChangeItem = {this.onChangeActivity.bind(this)} />
+            <View style={styles.item} ref="sActivityRef" collapsable={false}>
+              <Text style={styles.questionTextContainer}>7. What nature-based activites did you participate in during the tracking today? (*)</Text>
+              <Text style={styles.questionTextContainer}>Click multiple if relevant</Text>
+              <ItemMultiSelectList items={activityList} handleChangeItem = {this.onChangeActivity.bind(this)} />
             </View>
-            <View style={styles.item}>
-              <Text style={styles.questionTextContainer}>8. With whom did you conduct these activities today?</Text>
+            <View style={styles.item} ref="sParticipantRef" collapsable={false} removeClippedSubviews={false}>
+              <Text style={styles.questionTextContainer}>8. With whom did you conduct these activities today? (*)</Text>
               <Text style={styles.questionTextContainer}>choose only 1</Text>
               <ItemList items={participantsList} handleChangeItem = {this.onChangeParticipant.bind(this)} />
             </View>
-            <View style={styles.item}>
+            <View style={styles.item} collapsable={false}>
               <Text style={styles.questionTextContainer}>9. The visit today has been important for...</Text>
-              <Text style={styles.questionTextContainer}>1. Learning about the nature</Text>
+              <Text style={{color: '#E4151F', fontFamily:'Roboto-Regular', fontSize: 20, marginLeft:20, marginRight:20, marginTop:32}} ref="smLearnNatureRef">9.1. Learning about the nature (*)</Text>
               <ItemList items={markList} handleChangeItem = {this.onChangeLearnNature.bind(this)} />
-              <Text style={styles.questionTextContainer}>2. being together with my family/friends</Text>
+              <Text style={styles.questionSubTextContainer} ref="smTogetherRef">9.2. being together with my family/friends (*)</Text>
               <ItemList items={markList} handleChangeItem = {this.onChangeTogether.bind(this)} />
-              <Text style={styles.questionTextContainer}>3. my physical/mental health</Text>
+              <Text style={styles.questionSubTextContainer} ref="smHealthRef">9.3. my physical/mental health (*)</Text>
               <ItemList items={markList} handleChangeItem = {this.onChangeHealth.bind(this)} />
-              <Text style={styles.questionTextContainer}>4. inspiring me to create crafts, stories or other artistic work</Text>
+              <Text style={styles.questionSubTextContainer} ref="smInspireRef">9.4. inspiring me to create crafts, stories or other artistic work (*)</Text>
               <ItemList items={markList} handleChangeItem = {this.onChangeInspire.bind(this)} />
-              <Text style={styles.questionTextContainer}>5. Nurturing a deeper meaning of nature; emotionally or spiritually</Text>
+              <Text style={styles.questionSubTextContainer} ref="smNurtureRef">9.5. Nurturing a deeper meaning of nature; emotionally or spiritually (*)</Text>
               <ItemList items={markList} handleChangeItem = {this.onChangeNurture.bind(this)} />
             </View>
-            <View style={styles.item}>
-              <Text style={styles.questionTextContainer}>10. My experience today was negatively impacted by:</Text>
-              <ItemList items={negativesList} handleChangeItem = {this.onChangeExperience.bind(this)} />
+            <View style={styles.item} ref="sExperienceRef" collapsable={false}>
+              <Text style={styles.questionTextContainer}>10. My experience today was negatively impacted by: (*)</Text>
+              <ItemMultiSelectList items={negativesList} handleChangeItem = {this.onChangeExperience.bind(this)} />
             </View>
-            <View style={styles.item}>
-              <Text style={styles.questionTextContainer}>11. How would you rate your overall experience today?</Text>
+            <View style={styles.item} ref="smOverallRef" collapsable={false}>
+              <Text style={styles.questionTextContainer}>11. How would you rate your overall experience today? (*)</Text>
               <Text style={styles.questionTextContainer}>choose only 1</Text>
               <ItemList items={experienceMarkList} handleChangeItem = {this.onChangeOverall.bind(this)} />
             </View>
-            <View style={styles.item}>
+            <View style={{marginBottom:45, marginTop:0}} ref="iCommentRef" collapsable={false}>
               <Text style={styles.questionTextContainer}>12. Leave any additional comment that you would like to make here:</Text>
               <InputTextArea multiline={true} numberOfLines={4} handleChangeText={this.onChangeComment.bind(this)} />
             </View>
-            <View style={styles.item}>
+            <View style={{marginBottom:45, marginTop:0}} ref="iEmailRef" collapsable={false}>
               <Text style={styles.questionTextContainer}>13. We would appreciate if we at a later stage could ask you few more questions. If so, please enter your email here:</Text>
               <InputText placeholder="Email" handleChangeText={this.onChangeEmail.bind(this)} />
             </View>
-            <View style={styles.item}>
+            <View style={{marginBottom:0, marginTop:0}}>
               <Text style={styles.headTextContainer}>Thank you very much for your participation!</Text>
             </View>
             <View style={{marginLeft:20, marginRight:20, marginBottom:20, marginTop:20}}>
@@ -299,23 +320,31 @@ let styles = StyleSheet.create({
     justifyContent: 'space-between'    
   },
   headTextContainer: {
-    color: '#00743d',
+    color: '#01743D',
     fontSize: 20,    
-    fontWeight:'bold',
-    fontStyle: 'normal',
+    fontFamily:'Roboto-Bold',    
     marginLeft: 20,
     marginTop: 20,
-    marginRight: 20
+    marginRight: 20,
+    marginBottom: 28
   },
   questionTextContainer: {
-    color: 'red',
+    color: '#E4151F',
+    fontFamily:'Roboto-Bold',
     fontSize: 20,
-    marginLeft:20,
-    marginRight:20,
-    marginTop:20
+    marginLeft: 20,
+    marginRight: 20
+  },
+  questionSubTextContainer: {
+    color: '#E4151F',
+    fontFamily:'Roboto-Regular',
+    fontSize: 20,
+    marginLeft: 20,
+    marginRight: 20,
+    marginTop: 49
   },
   item:{
-    marginBottom:20,
+    marginBottom: 57,
     marginTop:0
   }
 });

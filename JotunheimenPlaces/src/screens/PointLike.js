@@ -5,7 +5,7 @@ import InputText from '../components/InputText';
 import InputTextArea from '../components/InputTextArea';
 import SelectBox from '../components/SelectBox';
 import TagList from '../components/TagList';
-import Button from '../components/Button';
+import ButtonWhite from '../components/ButtonWhite';
 import {Motion, spring} from 'react-motion';
 import { Actions } from 'react-native-router-flux';
 
@@ -112,17 +112,24 @@ class PointLike extends Component {
     return (
       <View
         style={styles.container}>
+        {
+          /*
         <View style={{flex:1.5, alignItems:'center', flexDirection: 'row', marginLeft:20}}>
           <ButtonCircle onPress={this.onBackToActivity.bind(this)} mode="prev-white" />
         </View>
-        <View style={{flex:7, justifyContent: 'center'}}>
+          */
+        }        
+        <View style={{flex:1, justifyContent: 'center', marginTop:20, marginBottom:20}}>
           { 
             (mode=="like")?
               <TagList items={likePointsList} mode={mode} getPoint={this.getPoint.bind(this)} />
             :
               <TagList items={dislikePointsList} mode={mode} getPoint={this.getPoint.bind(this)} />
           }
-        </View>          
+          <View style={{marginLeft:20, marginRight:20}}>
+            <ButtonWhite onPress={this.onBackToActivity.bind(this)}>SAVE</ButtonWhite>
+          </View>
+        </View>
       </View>
     );
   }

@@ -123,7 +123,7 @@ var styles = StyleSheet.create({
     flex: 1
   },
   button: {
-    backgroundColor: 'gray',
+    backgroundColor: '#C0BAB6',
     alignItems: 'center',
     borderWidth: 0,
     width:'100%',
@@ -133,12 +133,12 @@ var styles = StyleSheet.create({
   whiteFont: {
     color: '#fff',    
     fontSize: 18,
-    fontWeight: 'bold'
+    fontFamily: 'Roboto-Bold'
   },
   bgRed: {
-    backgroundColor: 'red'
+    backgroundColor: '#E4151F'
   },
   bgBlue: {
-    backgroundColor: '#00743C'
+    backgroundColor: '#01743D'
   }
 });

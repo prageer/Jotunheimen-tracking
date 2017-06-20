@@ -33,7 +33,8 @@ const styles = StyleSheet.create({
     borderWidth: 0
   },
   whiteFont: {
-    color: 'red',    
-    fontSize: 18
+    color: '#E4151F',
+    fontFamily: 'Roboto-Light',
+    fontSize: 20
   }
 });

@@ -60,10 +60,10 @@ class Consent extends Component {
         <View>
           <Text style={{height: 30}}>                
           </Text>
-          <Button onPress={()=>Actions.demographics()}>Accept Terms</Button>
+          <Button onPress={()=>Actions.demographics()}>Accept terms</Button>
           <Text style={{height: 10}}>                
           </Text>
-          <ButtonRedFlat onPress={()=>Actions.welcome()}>Exit the Survey</ButtonRedFlat>
+          <ButtonRedFlat onPress={()=>Actions.welcome()}>Exit the survey</ButtonRedFlat>
         </View>
       </View>
       
@@ -83,13 +83,14 @@ let styles = StyleSheet.create({
     paddingRight: 20
   },
   headTextContainer: {
-    color: '#00743d',
-    fontSize: 20,    
-    fontWeight:'bold'
+    color: '#01743D',
+    fontFamily: 'Roboto-Bold',
+    fontSize: 20
   },
   descTextContainer: {
-    color: '#00743d',
-    fontSize: 18,    
+    color: '#01743D',    
+    fontSize: 18,
+    fontFamily: 'Roboto-Regular',
     marginTop:5
   },
   ovalText: {

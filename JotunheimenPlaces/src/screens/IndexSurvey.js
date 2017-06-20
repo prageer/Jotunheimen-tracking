@@ -121,7 +121,7 @@ let styles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   button: {
-    backgroundColor: '#00743C',    
+    backgroundColor: '#01743D',    
     alignItems: 'center',
     borderWidth: 0,
     width:'100%',
@@ -130,8 +130,8 @@ let styles = StyleSheet.create({
   },
   whiteFont: {
     color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 25
+    fontFamily: 'Roboto-Bold',
+    fontSize: 32
   },
   instructBtn: {
     backgroundColor: '#56BD2D'

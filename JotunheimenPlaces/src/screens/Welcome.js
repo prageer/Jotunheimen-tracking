@@ -72,21 +72,22 @@ let styles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   logoTextContainer: {
-    color: '#00743d',
+    color: '#01743D',
     fontSize: 20,
-    textAlign: 'center',
-    fontWeight:'bold',
-    fontStyle: 'normal',
+    textAlign: 'center',    
+    fontFamily: 'Roboto-Bold',
     marginLeft:20,
     marginRight:15
   },
   descTextContainer: {
-    color: '#00743d',
+    color: '#01743D',
     fontSize: 18,
     textAlign: 'center',
+    fontFamily: 'Roboto-Regular',
     marginTop:20,
     marginLeft:20,
-    marginRight:15
+    marginRight:20,
+    lineHeight:28
   },
   ovalText: {
     color:'white',

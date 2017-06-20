@@ -39,7 +39,6 @@ class App extends Component {
    * @return {jsxresult} result in jsx format
    */
   render() {
-
     // find First Page
 
     let welcomeInitial = false;

@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     marginLeft:20
   },
   whiteFont: {
-    borderColor: '#00743C',
+    borderColor: '#01743D',
     borderWidth: 1,
     color: 'black',
     fontSize: 18,
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     height: 100
   },
   floatText: {
-    color: '#00743C',
+    color: '#01743D',
     fontSize: 18
   }
 });

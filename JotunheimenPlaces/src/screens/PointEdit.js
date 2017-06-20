@@ -5,7 +5,7 @@ import InputText from '../components/InputText';
 import InputTextArea from '../components/InputTextArea';
 import SelectBox from '../components/SelectBox';
 import TagList from '../components/TagList';
-import Button from '../components/Button';
+import ButtonWhite from '../components/ButtonWhite';
 import {Motion, spring} from 'react-motion';
 import { Actions } from 'react-native-router-flux';
 
@@ -146,6 +146,8 @@ class PointEdit extends Component {
     return (
       <View
         style={styles.container}>
+        {
+          /*
         <View style={{flex:1.5,  flexDirection: 'row', justifyContent: 'space-between', marginRight:20}}>
           <View style={{flex:0.3, justifyContent:'center', alignItems:'center'}}>
             <ButtonCircle onPress={this.onBackToActivity.bind(this)} mode="prev-white" />
@@ -156,7 +158,9 @@ class PointEdit extends Component {
             </TouchableOpacity>
           </View>
         </View>
-        <View style={{flex:7, justifyContent: 'center'}}>
+          */
+        }
+        <View style={{flex:1, justifyContent: 'center', marginTop:20, marginBottom:20}}>
           <TagList
             items={(mode=="like")?likePointsList:dislikePointsList}
             mode={mode}
@@ -164,6 +168,15 @@ class PointEdit extends Component {
             selectedIndex={this.props.selectedIndex}
             pointData={this.props.pointInfo[this.props.selectedIndex]}
           />
+          <View style={{flexDirection: 'row', justifyContent: 'space-between', marginRight:20, marginLeft:20}}>
+            <View style={{flex:0.48, justifyContent:'center', alignItems:'center'}}>
+              <ButtonWhite onPress={this.onBackToActivity.bind(this)}>BACK</ButtonWhite>
+            </View>
+            <View style={{flex:0.04}} />
+            <View style={{flex:0.48, justifyContent:'center', alignItems:'center'}}>
+              <ButtonWhite onPress={this.deletePoint.bind(this)}>DELETE</ButtonWhite>              
+            </View>
+          </View>
         </View>          
       </View>
     );

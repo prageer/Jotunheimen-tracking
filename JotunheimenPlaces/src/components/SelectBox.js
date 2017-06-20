@@ -69,7 +69,7 @@ export default class selectBox extends Component {
             )
           }
           <TextInput
-            style={{borderWidth: 1, borderColor: '#00743C', padding: 10, height: 40, fontSize: 18, color: 'black'}}
+            style={{borderWidth: 1, borderColor: '#01743D', padding: 10, height: 40, fontSize: 18, color: 'black'}}
             editable={false}
             placeholder={this.props.placeholder}
             value={this.state.textInputValue} />            
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     marginLeft: 20
   },
   floatText: {
-    color: '#00743C',
+    color: '#01743D',
     fontSize: 18
   }
 });
