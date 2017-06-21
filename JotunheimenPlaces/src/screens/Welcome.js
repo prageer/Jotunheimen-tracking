@@ -41,7 +41,7 @@ class Welcome extends Component {
               opacity: m.opacity, 
               alignItems: 'center'
             }}>
-              <Image style={{transform: [{scale: m.scale}], marginBottom:30}} source={require('../assets/jotunheimen-logo.png')} />
+              <Image style={{width:294, height:169, transform: [{scale: m.scale}], marginBottom:30}} source={require('../assets/jotunheimen-logo.png')} />
               <View>
                 <Text style={styles.logoTextContainer}>Welcome to our Nature-Based Tourism App!</Text>
                 <Text style={styles.descTextContainer}>We want to improve nature-based tourism in Norway. We appreciate if you could spend a few minutes to map your sites and share your experiences. </Text>

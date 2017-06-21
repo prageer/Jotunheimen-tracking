@@ -15,5 +15,10 @@ module.exports = {
     Delete Alert Text
   */
   DEL_TRACK_TITLE: "Delete This Track",
-  DEL_TRACK_CNT: "Are you sure to delete?"
+  DEL_TRACK_CNT: "Are you sure to delete?",
+  /*
+    GPS Location Alert Text
+  */
+  LOCATION_REQUIRE_TITLE: "Active your GPS",
+  LOCATION_REQUIRE_CNT: "Please active your GPS to be able to mark locations in the nature"
 }

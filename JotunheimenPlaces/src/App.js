@@ -13,8 +13,9 @@ import PointLike from './screens/PointLike';
 import PointEdit from './screens/PointEdit';
 import {connect} from 'react-redux';
 import {setLocalToFirebase} from './utils/firebase';
+import {Platform} from 'react-native';
 
-const { StyleSheet, Text, View} = ReactNative;
+const { StyleSheet, Text, View } = ReactNative;
 
 /**
  * High Level Container
@@ -31,7 +32,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    setLocalToFirebase( this.props.personalInfo, this.props.pointInfo, this.props.surveyInfo );
+    setLocalToFirebase( this.props.personalInfo, this.props.pointInfo, this.props.surveyInfo );    
   }
 
   /**
@@ -72,10 +73,14 @@ class App extends Component {
       }
     }
     
+    let statusStyle = [];
+    if( Platform.OS == 'ios'){
+      statusStyle = [styles.iOsStatusBar];
+    }
 
     return ( 
       <Router>
-        <Scene key="root" hideNavBar={true} hideTabBar={true} hideOnChildTabs={true}>
+        <Scene key="root" hideNavBar={true} hideTabBar={true} hideOnChildTabs={true} style={statusStyle}>
           <Scene key="instruction" component={Instruction} />
           <Scene key="welcome" component={Welcome} initial={welcomeInitial} />
           <Scene key="consent" component={Consent} />
@@ -92,6 +97,11 @@ class App extends Component {
   }
 }
 
+let styles = StyleSheet.create({
+  iOsStatusBar: {
+   marginTop:20 
+  }
+});
 /**
  * Map Redux store state to component props
  * @param {state} state Redux store state

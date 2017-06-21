@@ -8,13 +8,16 @@ import {
   setPoint
 } from '../actions/point';
 import {setPointToFirebase} from '../utils/firebase';
+import config from '../../config';
 
+const Permissions = require('react-native-permissions');
 const {
   Image,
   StyleSheet,
   Text,
   View,
-  TouchableOpacity
+  TouchableOpacity,
+  Alert
 } = ReactNative;
 
 /**
@@ -54,15 +57,33 @@ class IndexSurvey extends Component {
       info["stage"] = this.props.stage;      
 
       setPointToFirebase(info, dateTime);
-      this.props.setPoint(info);
+      this.props.setPoint(info);      
 
     }else{
       // continue
-
     }
+
+    Permissions.getPermissionStatus('location')
+    .then(response => {
+      //response is one of: 'authorized', 'denied', 'restricted', or 'undetermined'
+      if(response != "authorized"){
+        Alert.alert(
+          config.LOCATION_REQUIRE_TITLE,
+          config.LOCATION_REQUIRE_CNT,
+          [
+            {text: 'OK', onPress: () => {} }
+          ]
+        )
+      }
+    });
+    
     Actions.activity();
   }
 
+  /**
+   * componentDidMount - React default event
+   * @return {void}
+   */
   componentDidMount(){    
     // start
     if( !this.props.continue ){

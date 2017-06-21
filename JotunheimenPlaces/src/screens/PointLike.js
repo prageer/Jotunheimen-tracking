@@ -78,10 +78,9 @@ class PointLike extends Component {
     * Get location
     * @return {void}
     */
-  componentDidMount(){    
-
+  componentDidMount(){
     navigator.geolocation.getCurrentPosition(
-      (position) => {        
+      (position) => {
         this.location.lat = parseFloat(position.coords.latitude);
         this.location.long = parseFloat(position.coords.longitude);
       },

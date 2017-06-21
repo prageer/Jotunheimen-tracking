@@ -3,6 +3,7 @@ import ReactNative from 'react-native';
 import ButtonCircle from '../components/ButtonCircle';
 import { Actions } from 'react-native-router-flux';
 import {Motion, spring} from 'react-motion';
+import {connect} from 'react-redux';
 const {
   Image,
   StyleSheet,
@@ -31,6 +32,17 @@ class Instruction extends Component {
    * @return {jsxresult} result in jsx format
    */
   render() {
+
+    let activityContinue = false;
+
+    if(this.props.pointInfo.length !== 0){
+      let lastStage = this.props.pointInfo[this.props.pointInfo.length-1]["stage"];
+      let mode = this.props.pointInfo[this.props.pointInfo.length-1]["mode"];
+      if( lastStage == this.props.stage ){
+        activityContinue = true;        
+      }
+    }
+
     return (
       
       <View
@@ -61,7 +73,7 @@ class Instruction extends Component {
         </View>
         <View style={{flex:1, alignItems:'center', justifyContent: 'center'}}>
           <View>
-            <ButtonCircle onPress={()=>{Actions.indexsurvey();}} mode="prev-blue" />
+            <ButtonCircle onPress={()=>{Actions.indexsurvey({continue:activityContinue});}} mode="prev-blue" />
           </View>
         </View>
       </View>
@@ -98,4 +110,16 @@ let styles = StyleSheet.create({
   }
 });
 
-export default Instruction;
+/**
+ * Map Redux store state to component props
+ * @param {state} state Redux store state
+ * @return {json} state json State from redux store state
+ */
+const mapStateToProps = (state) => {    
+  return {
+    pointInfo: state.point.pointInfo,
+    stage: state.survey.stage
+  };
+};
+
+export default connect(mapStateToProps, null)(Instruction);

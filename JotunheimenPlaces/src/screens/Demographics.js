@@ -70,6 +70,10 @@ class Demographics extends Component {
     this.deviceHeight = Dimensions.get("window").height;
   }
 
+  /**
+    * componentDidMount-React Default Event
+    * @return {void}
+    */
   componentDidMount() {
     let taxNorList = tax.map((item, key)=>{
       return {'label': item.name, value: key};
@@ -79,6 +83,10 @@ class Demographics extends Component {
     })
   }
 
+  /**
+    * Go to scroll pos
+    * @return {void}
+    */
   goPos(infoIndex){
     var handle = findNodeHandle(this.refs[infoIndex+"Ref"]);
     RCTUIManager.measure(handle, (x, y, width, height, pageX, pageY) => {
