@@ -112,7 +112,7 @@ class TrackingSurvey extends Component {
   checkValidate(){
     let res = true;
     for(var i in this.info){      
-      if( i=="iComment" || i=="iEmail"){
+      if( i=="iComment" || i=="iEmail" || i=="sExperience"){
         if( i=="iEmail" && this.info[i] !="") {
           if( !validateEmail(this.info[i]) )
             return i;
@@ -282,7 +282,7 @@ class TrackingSurvey extends Component {
               <ItemList items={markList} handleChangeItem = {this.onChangeNurture.bind(this)} />
             </View>
             <View style={styles.item} ref="sExperienceRef" collapsable={false}>
-              <Text style={styles.questionTextContainer}>10. My experience today was negatively impacted by: (*)</Text>
+              <Text style={styles.questionTextContainer}>10. My experience today was negatively impacted by: </Text>
               <ItemMultiSelectList items={negativesList} handleChangeItem = {this.onChangeExperience.bind(this)} />
             </View>
             <View style={styles.item} ref="smOverallRef" collapsable={false}>

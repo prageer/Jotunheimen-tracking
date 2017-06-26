@@ -42,11 +42,6 @@ class PointEdit extends Component {
   constructor(props){
     super(props);
     this.info = [];
-
-    this.location = {
-      "lat": 0,
-      "long": 0
-    }
   }
 
   /**
@@ -63,8 +58,8 @@ class PointEdit extends Component {
     this.info["dateTime"] = dateTime;
     this.info["mode"] = this.props.mode;
 
-    this.info["lat"] = this.location.lat;
-    this.info["long"] = this.location.long;
+    this.info["lat"] = pointInfo[selectedIndex]["lat"];
+    this.info["long"] = pointInfo[selectedIndex]["long"];
     this.info["stage"] = this.props.stage;
     
     setPointToFirebase(this.info, dateTime);
@@ -82,25 +77,13 @@ class PointEdit extends Component {
   getPoint(points) {
     console.log(points);
     this.info = points;
-  }
+  }  
 
   /**
     * Get location
     * @return {void}
     */
-  componentDidMount(){    
-
-    navigator.geolocation.getCurrentPosition(
-      (position) => {        
-        this.location.lat = parseFloat(position.coords.latitude);
-        this.location.long = parseFloat(position.coords.longitude);
-      },
-      (error) => {
-        this.location.lat = 0;
-        this.location.long = 0;
-      },
-      { enableHighAccuracy: false }
-    );
+  componentDidMount(){
   }
 
   /**
@@ -145,7 +128,7 @@ class PointEdit extends Component {
     
     return (
       <View
-        style={styles.container}>
+        style={styles.container}>        
         {
           /*
         <View style={{flex:1.5,  flexDirection: 'row', justifyContent: 'space-between', marginRight:20}}>

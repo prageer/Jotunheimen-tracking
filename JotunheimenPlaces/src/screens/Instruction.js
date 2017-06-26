@@ -51,22 +51,22 @@ class Instruction extends Component {
           <ScrollView >
             <View>
               <Text style={styles.headTextContainer}>
-                Please follow these instructions:
+                How to use this app:
               </Text>
               <Text style={styles.descTextContainer}>
-                1. Sign the confidentiality consent.
+                1. Click "Start activity" to activate a trip, which could take from a short jogging, fishing, hiking to several days backpacking in nature. Please do not stop the activity until you completely finish it.
               </Text>
               <Text style={styles.descTextContainer}>
-                2. Complete a short survey with demographic variables.
+                2. Mark positive or negative spots in the nature and tag non-material benefits.
               </Text>
               <Text style={styles.descTextContainer}>
-                3. Track your activity. The activity could take from few minutes jogging, finishing, hiking... to several days backpacking in nature for several days. Do not stop tracking until you completely finish the activity. Mark interesting waypoints and tag non-material benefits.
+                3. When finishing an activity, complete a survey about the experience you just had.
               </Text>
               <Text style={styles.descTextContainer}>
-                4. Complete a survey about the experience you just had doing your nature activity TODAY only.
+                You will be able to withdraw from the study at any point by sending an email to <Text style={{textDecorationLine: "underline"}} onPress={()=>{Linking.openURL('mailto:lorena.munoz@uit.no?subject=&body=')}}>lorena.munoz@uit.no</Text>
               </Text>
               <Text style={styles.descTextContainer}>
-                5. Press "Send" button when you have completed the survey. You will be able to withdraw from the study at any point by sending an email to <Text style={{textDecorationLine: "underline"}} onPress={()=>{Linking.openURL('mailto:lorena.munoz@uit.no?subject=&body=')}}>lorena.munoz@uit.no</Text>
+                Project website: <Text style={{textDecorationLine: "underline"}} onPress={()=>{Linking.openURL('http://site.uit.no/cultes/en/related-projects/phd-nature-based-tourism/')}}>http://site.uit.no/cultes/en/related-projects/phd-nature-based-tourism/</Text>
               </Text>
             </View>            
           </ScrollView>

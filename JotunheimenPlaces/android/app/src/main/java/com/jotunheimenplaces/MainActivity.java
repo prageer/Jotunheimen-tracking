@@ -1,7 +1,6 @@
 package com.jotunheimenplaces;
 
 import com.facebook.react.ReactActivity;
-import com.joshblour.reactnativepermissions.ReactNativePermissionsPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 
 public class MainActivity extends ReactActivity {

@@ -16,15 +16,22 @@ import {
 import {setPointToFirebase} from '../utils/firebase';
 import likePoints from '../constants/likePoints';
 import dislikePoints from '../constants/dislikePoints';
+import config from '../../config';
 
+import Spinner from 'react-native-loading-spinner-overlay';
 const {
   Image,
   StyleSheet,
   Text,
   View,  
   ScrollView,
-  TouchableOpacity
+  TouchableOpacity,
+  DeviceEventEmitter,
+  Alert,
+  Platform
 } = ReactNative;
+
+var { RNLocation: Location } = require('NativeModules');
 
 /**
  * Container component for PointLike page
@@ -38,11 +45,15 @@ class PointLike extends Component {
     */
   constructor(props) {
     super(props);
-    this.info = [];
+    this.info = [];    
     this.location = {
       "lat": 0,
       "long": 0
     }
+
+    this.state = {
+      visible: false
+    };
   }
 
   /**
@@ -57,8 +68,7 @@ class PointLike extends Component {
 
     this.info["lat"] = this.location.lat;
     this.info["long"] = this.location.long;
-    this.info["stage"] = this.props.stage;
-    console.log(this.info);
+    this.info["stage"] = this.props.stage;    
     setPointToFirebase(this.info, dateTime);
     this.props.setPoint(this.info);
     
@@ -75,21 +85,106 @@ class PointLike extends Component {
   }
 
   /**
+    * Stop Location
+    * @return {void}
+    */
+  stopLocationIOS() {
+
+    if( this.location.lat === 0  ){
+      Alert.alert(
+        config.LOCATION_ERROR_TITLE,
+        config.LOCATION_ERROR_CNT,
+        [
+          {text: 'OK', onPress: () => {
+            this.setState({
+              visible: false
+            });
+
+            Actions.activity();
+
+          } }
+        ]
+      )
+
+    }
+  }
+
+  /**
+    * Stop Location
+    * @return {void}
+    */
+  stopLocation() {
+    if( this.location.lat === 0  ){
+      Alert.alert(
+        config.LOCATION_ERROR_TITLE,
+        config.LOCATION_ERROR_CNT,
+        [
+          {text: 'OK', onPress: () => {} }
+        ]
+      )
+
+      this.setState({
+        visible: false
+      });
+
+      Location.stopUpdatingLocation();      
+      Actions.activity();
+    }
+  }
+
+  /**
     * Get location
     * @return {void}
     */
   componentDidMount(){
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        this.location.lat = parseFloat(position.coords.latitude);
-        this.location.long = parseFloat(position.coords.longitude);
-      },
-      (error) => {
-        this.location.lat = 0;
-        this.location.long = 0;
-      },
-      { enableHighAccuracy: false }
-    );
+
+    if( Platform.OS!= 'ios'){
+      this.setState({
+        visible: true
+      });
+      setTimeout(this.stopLocation.bind(this), 10000);
+
+      Location.startUpdatingLocation();
+
+      var subscription = DeviceEventEmitter.addListener(
+        'locationUpdated',
+          (location) => {
+            if( this.location.long === 0){
+              this.location.long = location.longitude;
+              this.location.lat = location.latitude;
+              this.setState({
+                visible: false
+              });
+            }
+          }
+      );
+    } else {
+
+      this.setState({
+        visible: true
+      }, ()=>{
+
+        navigator.geolocation.getCurrentPosition(
+          (position) => {        
+            this.location.lat = parseFloat(position.coords.latitude);
+            this.location.long = parseFloat(position.coords.longitude);
+            
+            this.setState({
+              visible: false
+            });
+
+          },
+          (error) => {
+            this.stopLocationIOS();
+          },
+          {enableHighAccuracy: true, timeout: 10000, maximumAge:0}
+        );
+
+      });
+
+      
+
+    }
   }
 
   /**
@@ -111,6 +206,7 @@ class PointLike extends Component {
     return (
       <View
         style={styles.container}>
+        <Spinner visible={this.state.visible} textContent={config.LOCATION_LOADING_TEXT} textStyle={{color: '#FFF'}} />
         {
           /*
         <View style={{flex:1.5, alignItems:'center', flexDirection: 'row', marginLeft:20}}>
