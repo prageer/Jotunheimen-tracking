@@ -1,10 +1,11 @@
 <?php
 session_start();
 include('common/connection.php'); 
+include('./config.php'); 
 		
   if(isset($_POST['users_name']) ){
 
-		$checkin = ($_POST['users_name'] == "admin" && $_POST['users_password']=="admin")?true:false;
+		$checkin = ($_POST['users_name'] == $admin_user && $_POST['users_password']==$admin_passwd)?true:false;
 
 		if($checkin){
 			$_SESSION['AdminUser']  = $_POST['users_name'];
@@ -13,7 +14,7 @@ include('common/connection.php');
 			
 		}else{
 			$msg=base64_encode("Invalid username or password");
-//			ReDirect("login.php?msg=$msg&msgtyp=error");
+			ReDirect("login.php?msg=$msg&msgtyp=error");
 			exit();
 		}
 		
