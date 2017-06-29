@@ -3,7 +3,7 @@
 		<h3><?php echo $Title;?></h3>
 		<ul class='nav nav-tabs'>
 			<li class='active'>
-				<a href="#basic" data-toggle="tab" style="cursor:pointer;" onclick="saveAsExcel();">Download excel file</a>
+				<a href="#basic" data-toggle="tab" style="cursor:pointer;" onclick="saveAsExcel();">Download csv file</a>
 			</li>
 		</ul>
 	</div>
