@@ -1,3 +1,0 @@
-import {
-  SET_QUESTIONS
-}
