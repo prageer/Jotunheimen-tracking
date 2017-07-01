@@ -65,6 +65,7 @@ class Activity extends Component {
 
     let hours = now.getHours();
     let minutes = now.getMinutes();
+    minutes = (minutes<10) ? ("0" + minutes) : minutes;
 
     let dateStr = date+'.'+month+'.'+year+' '+hours+':'+minutes;
     return dateStr;
