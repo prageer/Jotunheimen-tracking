@@ -24,5 +24,5 @@ module.exports = {
   /*
     Location loading
   */
-  LOCATION_LOADING_TEXT: "Getting Location..."
+  LOCATION_LOADING_TEXT: "Activating GPS, max 30 sec"
 }
