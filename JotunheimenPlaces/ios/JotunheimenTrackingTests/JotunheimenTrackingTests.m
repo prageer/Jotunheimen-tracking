@@ -16,11 +16,11 @@
 #define TIMEOUT_SECONDS 600
 #define TEXT_TO_LOOK_FOR @"Welcome to React Native!"
 
-@interface JotunheimenPlacesTests : XCTestCase
+@interface JotunheimenTrackingTests : XCTestCase
 
 @end
 
-@implementation JotunheimenPlacesTests
+@implementation JotunheimenTrackingTests
 
 - (BOOL)findSubviewInView:(UIView *)view matching:(BOOL(^)(UIView *view))test
 {

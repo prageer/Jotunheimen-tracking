@@ -1,4 +1,4 @@
-package com.jotunheimenplaces;
+package com.jotunheimentracking;
 
 import android.app.Application;
 

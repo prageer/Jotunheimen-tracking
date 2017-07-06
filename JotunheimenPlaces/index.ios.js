@@ -7,7 +7,7 @@ import configureStore from './src/store/configureStore'
 
 console.disableYellowBox = true;
 
-export default class JotunheimenPlaces extends Component {
+export default class JotunheimenTracking extends Component {
   
   constructor(props){
     super(props);
@@ -33,4 +33,4 @@ export default class JotunheimenPlaces extends Component {
   }
 }
 
-AppRegistry.registerComponent('JotunheimenPlaces', () => JotunheimenPlaces);
+AppRegistry.registerComponent('JotunheimenTracking', () => JotunheimenTracking);
