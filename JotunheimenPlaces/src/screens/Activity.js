@@ -79,6 +79,25 @@ class Activity extends Component {
     this.refs.modal3.open();
   }
 
+  saveFinishInfo() {
+    let info = {};
+    let dateTime = Math.floor(Date.now() / 1000);
+    info["dateTime"] = dateTime;
+    info["mode"] = "finish";
+
+    info["lat"] = this.location.lat;
+    info["long"] = this.location.long;
+    info["stage"] = this.props.stage;      
+
+    setPointToFirebase(info, dateTime);
+    this.props.setPoint(info);
+
+    this.setState({
+      visible: false
+    });
+    Actions.trackingsurvey();
+  }
+
   /**
     * Go next page, Survey page
     * @return {void}
@@ -101,26 +120,9 @@ class Activity extends Component {
             (location) => {
 
               if( this.location.long === 0){
-
                 this.location.long = location.longitude;
-                this.location.lat = location.latitude;              
-
-                let info = {};
-                let dateTime = Math.floor(Date.now() / 1000);
-                info["dateTime"] = dateTime;
-                info["mode"] = "finish";
-
-                info["lat"] = this.location.lat;
-                info["long"] = this.location.long;
-                info["stage"] = this.props.stage;      
-
-                setPointToFirebase(info, dateTime);
-                this.props.setPoint(info);
-
-                this.setState({
-                  visible: false
-                });
-                Actions.trackingsurvey();
+                this.location.lat = location.latitude;
+                this.saveFinishInfo();                
               }
             }
         );
@@ -134,27 +136,7 @@ class Activity extends Component {
             (position) => {        
               this.location.lat = parseFloat(position.coords.latitude);
               this.location.long = parseFloat(position.coords.longitude);
-              
-
-              let info = {};
-              let dateTime = Math.floor(Date.now() / 1000);
-              info["dateTime"] = dateTime;
-              info["mode"] = "finish";
-
-              info["lat"] = this.location.lat;
-              info["long"] = this.location.long;
-              info["stage"] = this.props.stage;      
-
-              setPointToFirebase(info, dateTime);
-              this.props.setPoint(info);
-
-              this.setState({
-                visible: false
-              });
-              Actions.trackingsurvey();
-
-
-
+              this.saveFinishInfo();
             },
             (error) => {
               this.stopLocationIOS();
@@ -163,9 +145,6 @@ class Activity extends Component {
           );
 
         });
-
-        
-
 
       }
 
@@ -181,6 +160,7 @@ class Activity extends Component {
   stopLocationIOS() {
 
     if( this.location.lat === 0  ){
+      /*
       Alert.alert(
         config.LOCATION_ERROR_TITLE,
         config.LOCATION_ERROR_CNT,
@@ -191,8 +171,12 @@ class Activity extends Component {
             });
           } }
         ]
-      )
-
+      )*/    
+      this.setState({
+        visible: false
+      }, ()=>{
+        this.saveFinishInfo();
+      });
     }
   }
 
@@ -203,6 +187,7 @@ class Activity extends Component {
   stopLocation() {
 
     if( this.location.lat === 0  ){
+      /*
       Alert.alert(
         config.LOCATION_ERROR_TITLE,
         config.LOCATION_ERROR_CNT,
@@ -210,10 +195,15 @@ class Activity extends Component {
           {text: 'OK', onPress: () => {} }
         ]
       )
+      */
+      
       this.setState({
         visible: false
-      });
-      Location.stopUpdatingLocation();
+      },()=>{
+        Location.stopUpdatingLocation();        
+        this.saveFinishInfo();
+      });      
+      
     }
   }
 
