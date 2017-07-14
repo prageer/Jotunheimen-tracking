@@ -309,7 +309,7 @@ class Activity extends Component {
           </View>
           <View style={{}}>
             <Text style={styles.descText}>
-              Track your activity. The activity could take from few minutes joggin, fishing, hiking... to several days backpacking in nature for several days. Do not stop tracking until you completely finish the activity. Mark interesting waypoints and tag non-material benefits.
+              Track your activity. The activity could take from few minutes jogging, fishing, hiking... to several days backpacking in nature for several days. Do not stop tracking until you completely finish the activity. Mark interesting waypoints and tag non-material benefits.
             </Text>
           </View>
           <View style={{}}>
