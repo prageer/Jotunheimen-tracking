@@ -1,7 +1,7 @@
 <?php
-	$url = 'https://jotunheimen-80f9e.firebaseio.com';
-	$token = 'LonvcGzKKy90XubS6A9Y2iDkTnHQaF1JA1eLUuK5';
+	$url = 'https://<YOUR FIREBASE APP ID>.firebaseio.com';
+	$token = '<SECRET FROM FIREBASE DATABASE>';
 
-	$admin_user = 'admin';
-	$admin_passwd = 'admin';
+	$admin_user = '<SET USERNAME>';
+	$admin_passwd = '<SET PASSWORD>';
 ?>
