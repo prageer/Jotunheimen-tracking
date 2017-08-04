@@ -1,3 +1,20 @@
+<?php
+	$dataArray = array();
+	foreach($survey as $key=>$r){
+		foreach($r as $k=>$v){
+			$v["deviceId"] = $key;
+			$dataArray[] = $v;
+		}
+	}
+	
+	$temp = array();
+	foreach ($dataArray as $key => $row)
+	{
+		$temp[$key] = $row['dateTime'];
+	}
+
+	array_multisort($temp, SORT_ASC, $dataArray);
+?>
 <div class="box">
 	<div class="box-head tabs">
 		<h3><?php echo $Title;?></h3>
@@ -11,7 +28,7 @@
 		<div class="tab-content">
 				<div class="tab-pane active" id="basic">
 					<div class="box-content box-nomargin">
-					<table class='table table-striped dataTable table-bordered'>
+					<table class='table table-striped dataTable table-bordered' id="surveys">
 						<thead>
 							<tr>
 								<th width="20">No</th>
@@ -33,34 +50,31 @@
 						</thead>
 						<tbody>
 						<?php
-						$m=1;
-					    foreach($survey as $key=>$r){
-							foreach($r as $k=>$v){
+							$m=1;
+							foreach($dataArray as $k=>$v){
 
-							$dtArr = explode("-", $v['dateTime']);
+								$dtArr = explode("-", $v['dateTime']);
 							
 						?>	
-							<tr>
-								<td style="text-align: center;"><?php echo $m;?></td>
-								<td><?php echo $key; ?></td>
-								<td style="text-align: right;"><?php echo date('d.m.Y H:i', $dtArr[0]); ?></td>								
-								<td><?php echo $v['sActivity']; ?></td>
-								<td><?php echo $v['sParticipant']; ?></td>
-								<td><?php echo $v['smLearnNature']; ?></td>
-								<td><?php echo $v['smTogether']; ?></td>
-								<td><?php echo $v['smHealth']; ?></td>
-								<td><?php echo $v['smInspire']; ?></td>
-								<td><?php echo $v['smNurture']; ?></td>
-								<td><?php echo $v['sExperience']; ?></td>								
-								<td><?php echo $v['smOverall']; ?></td>								
-								<td><?php echo $v['iComment']; ?></td>
-								<td><?php echo $v['iEmail']; ?></td>
-								<td><?php echo $v['stage']; ?></td>								
-							</tr>
+								<tr>
+									<td style="text-align: center;"><?php echo $m;?></td>
+									<td><?php echo $v['deviceId']; ?></td>
+									<td style="text-align: right;"><?php echo date('Y-m-d H:i', $dtArr[0]); ?></td>								
+									<td><?php echo $v['sActivity']; ?></td>
+									<td><?php echo $v['sParticipant']; ?></td>
+									<td><?php echo $v['smLearnNature']; ?></td>
+									<td><?php echo $v['smTogether']; ?></td>
+									<td><?php echo $v['smHealth']; ?></td>
+									<td><?php echo $v['smInspire']; ?></td>
+									<td><?php echo $v['smNurture']; ?></td>
+									<td><?php echo $v['sExperience']; ?></td>								
+									<td><?php echo $v['smOverall']; ?></td>								
+									<td><?php echo $v['iComment']; ?></td>
+									<td><?php echo $v['iEmail']; ?></td>
+									<td><?php echo $v['stage']; ?></td>								
+								</tr>
 						<?php	 	
-							$m++;
-							}
-						
+							$m++;						
 						}
 						?>
 						</tbody>

@@ -7,6 +7,27 @@
 	$survey = $firebase->get('/survey');		
 	$survey = json_decode($survey, true);
 
+
+	$prtArray = array();
+	foreach($survey as $key=>$r){
+		foreach($r as $k=>$v){
+			$v["deviceId"] = $key;
+			$prtArray[] = $v;
+		}
+	}
+	
+	$temp = array();
+	foreach ($prtArray as $key => $row)
+	{
+		$temp[$key] = $row['dateTime'];
+	}
+
+	array_multisort($temp, SORT_ASC, $prtArray);
+
+
+
+
+
 	function g_file_download( $arr ){
 		header("Content-Type: text/csv");
 		header('Content-Disposition: attachment; filename=survey.csv');
@@ -24,7 +45,7 @@
 	
 	$m=1;
 	$dataArray = array(
-		array(
+		 array(
 			"No",
 			"Device Id",
 			"Date Time",
@@ -43,15 +64,14 @@
 		)
 	);
 
-	if (sizeof($survey) >= 1) {
-		foreach($survey as $key=>$r){
-			foreach($r as $k=>$v){
+	if (sizeof($prtArray) >= 1) {
+		foreach($prtArray as $k=>$v){
 			
 				$dtArr = explode("-", $v['dateTime']);
 
 				$dataArray[$m] = array(
 					$m,
-					$key,
+					$v['deviceId'],
 					date('d.m.Y H:i', $dtArr[0]),
 					$v['sActivity'],
 					$v['sParticipant'],
@@ -67,8 +87,6 @@
 					$v['stage']
 				);
 				$m++;
-			}
-		
 		}
 	}
 

@@ -1,3 +1,20 @@
+<?php
+	$dataArray = array();
+	foreach($point as $key=>$r){
+		foreach($r as $k=>$v){
+			$v["deviceId"] = $key;
+			$dataArray[] = $v;
+		}
+	}
+	
+	$temp = array();
+	foreach ($dataArray as $key => $row)
+	{
+		$temp[$key] = $row['dateTime'];
+	}
+
+	array_multisort($temp, SORT_ASC, $dataArray);
+?>
 <div class="box">
 	<div class="box-head tabs">
 		<h3><?php echo $Title;?></h3>
@@ -11,7 +28,7 @@
 		<div class="tab-content">
 				<div class="tab-pane active" id="basic">
 					<div class="box-content box-nomargin">
-					<table class='table table-striped dataTable table-bordered'>
+					<table class='table table-striped dataTable table-bordered' id='tracks'>
 						<thead>
 							<tr>
 								<th width="20">No</th>
@@ -26,34 +43,31 @@
 						</thead>
 						<tbody>
 						<?php
-						$m=1;
-					    foreach($point as $key=>$r){
-							foreach($r as $k=>$v){
+							$m=1;
+							foreach($dataArray as $k=>$v){
 
-							$dtArr = explode("-", $v['dateTime']);
-							
-							$cnt = "";
-							for($t=0; $t<=6; $t++){
-								if( isset($v["item_".$t]) )
-									$cnt .= $v["item_".$t].", ";
-							}
-							$cnt = substr($cnt, 0, -2);
+								$dtArr = explode("-", $v['dateTime']);
+								
+								$cnt = "";
+								for($t=0; $t<=6; $t++){
+									if( isset($v["item_".$t]) )
+										$cnt .= $v["item_".$t].", ";
+								}
+								$cnt = substr($cnt, 0, -2);
 						?>	
-							<tr>
-								<td style="text-align: center;"><?php echo $m;?></td>
-								<td><?php echo $key; ?></td>
-								<td style="text-align: right;"><?php echo date('d.m.Y H:i', $dtArr[0]); ?></td>
-								<td><?php echo $v['lat']; ?></td>
-								<td><?php echo $v['long']; ?></td>
-								<td><?php echo $v['mode']; ?></td>
-								<td><?php echo $cnt; ?></td>
-								<td><?php echo $v['stage']; ?></td>
-							</tr>
+								<tr>
+									<td style="text-align: center;"><?php echo $m;?></td>
+									<td><?php echo $v['deviceId']; ?></td>
+									<td style="text-align: right;"><?php echo date('Y-m-d H:i', $dtArr[0]); ?></td>
+									<td><?php echo $v['lat']; ?></td>
+									<td><?php echo $v['long']; ?></td>
+									<td><?php echo $v['mode']; ?></td>
+									<td><?php echo $cnt; ?></td>
+									<td><?php echo $v['stage']; ?></td>
+								</tr>
 						<?php	 	
 							$m++;
 							}
-						
-						}
 						?>
 						</tbody>
 					</table>									
@@ -70,4 +84,6 @@
 		$('#myFrm').get()[0].action="./prt/point.php";
 		$("#myFrm").submit();
 	}
+	
+	
 </script>
